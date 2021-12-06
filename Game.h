@@ -22,6 +22,7 @@ int g_SnakeHeadIdx{};
 int g_FruitIdx{};
 
 bool g_UpdateFruit{};
+bool g_ShowInfo{};
 
 // Declare your own functions here
 void InitGrid();

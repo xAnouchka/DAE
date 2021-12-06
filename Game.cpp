@@ -9,16 +9,18 @@ void Start()
 	InitGrid();
 	InitSnake();
 	InitFruit();
+	g_ShowInfo = false;
+	g_UpdateFruit = true;
 }
 
 void Draw()
 {
 	ClearBackground();
 
-	// Put your own draw statements here
 	DrawGrid();
 	DrawSnake();
 	DrawFruit();
+	ShowInfo();
 }
 
 void Update(float elapsedSec)
@@ -53,19 +55,12 @@ void OnKeyDownEvent(SDL_Keycode key)
 
 void OnKeyUpEvent(SDL_Keycode key)
 {
-	//switch (key)
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch (key)
+	{
+	case SDLK_i:
+		g_ShowInfo = !g_ShowInfo;
+		break;
+	}
 }
 
 void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)
@@ -124,10 +119,9 @@ void InitFruit()
 	g_FruitIdx = GetCellIdx(point);
 }
 
-/* Function to set the snake in grid when program is opened */
+/* Function to set the snake in middle of the grid when program is opened */
 void InitSnake()
 {
-	// get idx of the middle cell?
 	g_SnakeHeadIdx = GetLinearIndexFrom2DIndex(g_NrRows / 2, g_NrCols / 2, g_NrCols);
 }
 
@@ -196,6 +190,9 @@ void ShowInfo()
 	// half opacity rect as a background overlay
 	// texture from string to show the info 
 	
-	// when click i it should toggle on and off, so maybe a boolean for this
+	if (g_ShowInfo)	// boolean to allow for toggleability
+	{
+		// draw info
+	}
 }
 #pragma endregion ownDefinitions
