@@ -24,6 +24,9 @@ int g_FruitIdx{};
 bool g_UpdateFruit{};
 bool g_ShowInfo{};
 
+enum class Direction{ left, right, up, down };
+Direction g_Dir{};
+
 // Declare your own functions here
 void InitGrid();
 void InitSnake();

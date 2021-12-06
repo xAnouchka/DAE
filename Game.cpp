@@ -55,6 +55,7 @@ void OnKeyDownEvent(SDL_Keycode key)
 
 void OnKeyUpEvent(SDL_Keycode key)
 {
+	// keys wasd or arrows -> change g_Dir
 	switch (key)
 	{
 	case SDLK_i:
@@ -186,7 +187,8 @@ void MoveSnake()
 /* Function to show info about the game, e.g. keybindings */
 void ShowInfo()
 {
-	// THE GAME SHOULD PAUSE SOMEHOW 
+	// THE GAME SHOULD PAUSE SOMEHOW -> when g_ShowInfo is on, stop moving the snake -> bool for moving the snake? or reuse g_ShowInfo
+	
 	// half opacity rect as a background overlay
 	// texture from string to show the info 
 	
