@@ -127,7 +127,7 @@ void InitSnake()
 }
 
 /* Function to get the cell index of a point in the screen, returns the index int */
-int GetCellIdx(Point2f point)
+int GetCellIdx(const Point2f& point)
 {
 	for (int i = 0; i < g_GridSize; i++)
 	{

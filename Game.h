@@ -39,7 +39,7 @@ void DrawFruit();
 void MoveSnake();
 
 bool DidSnakeGetFruit();
-int GetCellIdx(Point2f point);
+int GetCellIdx(const Point2f& point);
 
 void ShowInfo();
 
