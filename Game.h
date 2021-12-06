@@ -13,23 +13,28 @@ float g_WindowHeight{ 700 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-const float g_CellSize{ 25 };
-int g_GridSize{ int(g_WindowWidth/g_CellSize) * int(g_WindowHeight/g_CellSize) };
+const float g_CellSize{ 25 }, g_NrCols{ g_WindowWidth / g_CellSize }, g_NrRows{ g_WindowHeight / g_CellSize };
+const int g_GridSize{ int(g_WindowWidth/g_CellSize) * int(g_WindowHeight/g_CellSize) };
 Rectf* pCells{ new Rectf[g_GridSize] {} };
-const float g_NrCols{ g_WindowWidth / g_CellSize }, g_NrRows{ g_WindowHeight / g_CellSize };
 
+int g_SnakeHeadIdx{};
+int g_FruitIdx{};
+
+bool g_UpdateFruit{};
 
 // Declare your own functions here
 void InitGrid();
-int GetCellIdx(Point2f point);
+void InitSnake();
+void InitFruit();
 
 void DrawGrid();
 void DrawSnake();
 void DrawFruit();
 
-bool DidSnakeGetFruit();
-
 void MoveSnake();
+
+bool DidSnakeGetFruit();
+int GetCellIdx(Point2f point);
 
 #pragma endregion ownDeclarations
 

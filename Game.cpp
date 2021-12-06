@@ -7,6 +7,8 @@
 void Start()
 {
 	InitGrid();
+	InitSnake();
+	InitFruit();
 }
 
 void Draw()
@@ -99,7 +101,7 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 #pragma endregion inputHandling
 
 #pragma region ownDefinitions
-// Define your own functions here
+/* Function to add all the cells to the array pCells */
 void InitGrid()
 {
 	// for every row: for every column: start.x + column*10, start.y + row*10, 25, 25
@@ -115,6 +117,20 @@ void InitGrid()
 	}
 }
 
+/* Function to set g_FruitIdx to a new number */
+void InitFruit()
+{
+	Point2f point{ GetRand(0, int(g_WindowWidth)) / 1.f, GetRand(0, int(g_WindowHeight)) / 1.f };
+	g_FruitIdx = GetCellIdx(point);
+}
+
+/* Function to set the snake in grid when program is opened */
+void InitSnake()
+{
+	// get idx of the middle cell?
+}
+
+/* Function to get the cell index of a point in the screen, returns the index int */
 int GetCellIdx(Point2f point)
 {
 	for (int i = 0; i < g_GridSize; i++)
@@ -124,6 +140,7 @@ int GetCellIdx(Point2f point)
 	return 0;
 }
 
+/* Function to draw the grid based on rects in array */
 void DrawGrid()
 {
 	SetColor(.2f, .2f, 2.f, 1);
@@ -132,26 +149,39 @@ void DrawGrid()
 	}
 }
 
+/* Function to draw the snake (current: 1 rect big) */
 void DrawSnake()
 {
-
+	SetColor(1, 0, 0, 1);
+	FillRect(pCells[g_SnakeHeadIdx]);
 }
 
+/* Function to draw the fruit */
 void DrawFruit()
 {
-	Point2f point{ GetRand(0, int(g_WindowWidth)) / 1.f, GetRand(0, int(g_WindowHeight)) / 1.f };
-	int idx{ GetCellIdx(point) };
+	if (g_UpdateFruit)	// if true, get a new cell index
+	{
+		InitFruit();
+		g_UpdateFruit = false;
+	}
+
 	SetColor(1, 1, 0, 1);
-	FillRect( pCells[idx] );
+	FillRect( pCells[g_FruitIdx] );
 }
 
+/* Function to check if the snake has the fruit or not, returns a bool */
 bool DidSnakeGetFruit()
 {
-
+	if (g_SnakeHeadIdx == g_FruitIdx)
+	{
+		return true;
+	}
+	return false;
 }
 
+/* Function to move the snake */
 void MoveSnake()
 {
-
+	// maybe make an enum class for the direction? and based on which key it will give the param
 }
 #pragma endregion ownDefinitions
