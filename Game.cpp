@@ -14,9 +14,9 @@ void Draw()
 	ClearBackground();
 
 	// Put your own draw statements here
-	SetColor(0, 0, 0, 1);
-	DrawRect(10, 10, 25, 25);
-
+	DrawGrid();
+	DrawSnake();
+	DrawFruit();
 }
 
 void Update(float elapsedSec)
@@ -115,4 +115,43 @@ void InitGrid()
 	}
 }
 
+int GetCellIdx(Point2f point)
+{
+	for (int i = 0; i < g_GridSize; i++)
+	{
+		if (IsPointInRect(point, pCells[i])) return i;
+	}
+	return 0;
+}
+
+void DrawGrid()
+{
+	SetColor(.2f, .2f, 2.f, 1);
+	for (int i{ 0 }; i < g_GridSize; i++) {
+		DrawRect(pCells[i]);
+	}
+}
+
+void DrawSnake()
+{
+
+}
+
+void DrawFruit()
+{
+	Point2f point{ GetRand(0, int(g_WindowWidth)) / 1.f, GetRand(0, int(g_WindowHeight)) / 1.f };
+	int idx{ GetCellIdx(point) };
+	SetColor(1, 1, 0, 1);
+	FillRect( pCells[idx] );
+}
+
+bool DidSnakeGetFruit()
+{
+
+}
+
+void MoveSnake()
+{
+
+}
 #pragma endregion ownDefinitions
