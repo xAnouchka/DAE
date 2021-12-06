@@ -163,7 +163,6 @@ void DrawFruit()
 
 	SetColor(1, 1, 0, 1);
 	float radius{ g_CellSize / 2 };
-	// FillRect( pCells[g_FruitIdx] );
 	FillEllipse(Point2f{ pCells[g_FruitIdx].left + radius, pCells[g_FruitIdx].bottom + radius }, radius, radius);
 }
 
@@ -194,9 +193,14 @@ void ShowInfo()
 	
 	if (g_ShowInfo)	// boolean to allow for toggleability
 	{
-		// draw info
 		SetColor(0, 0, 0, .7f);
 		FillRect(g_CellSize, g_CellSize, (g_WindowWidth - 2 * g_CellSize), (g_WindowHeight - 2 * g_CellSize));
+		
+		// key bindings
+		// authors of game
 	}
+
+	// maybe a box that says press i for info
+	// maybe a score too?
 }
 #pragma endregion ownDefinitions
