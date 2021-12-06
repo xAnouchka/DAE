@@ -103,12 +103,11 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 void InitGrid()
 {
 	// for every row: for every column: start.x + column*10, start.y + row*10, 25, 25
-	float nrCols{ g_WindowWidth / g_CellSize }, nrRows{ g_WindowHeight / g_CellSize };
 	int cellnr{ 0 };
 
-	for (int row{ 0 }; row < nrRows; row++)
+	for (int row{ 0 }; row < g_NrRows; row++)
 	{
-		for (int col{ 0 }; col < nrCols; col++)
+		for (int col{ 0 }; col < g_NrCols; col++)
 		{
 			pCells[cellnr] = Rectf{ col * g_CellSize, row * g_CellSize, g_CellSize, g_CellSize };
 			++cellnr;

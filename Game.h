@@ -16,6 +16,8 @@ float g_WindowHeight{ 700 };
 const float g_CellSize{ 25 };
 int g_GridSize{ (g_WindowWidth/g_CellSize) * (g_WindowHeight/g_CellSize) };
 Rectf* pCells{ new Rectf[g_GridSize] {} };
+const float g_NrCols{ g_WindowWidth / g_CellSize }, g_NrRows{ g_WindowHeight / g_CellSize };
+
 
 // Declare your own functions here
 void InitGrid();
