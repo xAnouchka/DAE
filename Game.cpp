@@ -139,7 +139,7 @@ int GetCellIdx(const Point2f& point)
 /* Function to draw the grid based on rects in array */
 void DrawGrid()
 {
-	SetColor(.2f, .2f, 2.f, 1);
+	SetColor(.2f, .2f, .2f, 1);
 	for (int i{ 0 }; i < g_GridSize; i++) {
 		DrawRect(pCells[i]);
 	}
