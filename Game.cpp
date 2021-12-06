@@ -167,7 +167,9 @@ void DrawFruit()
 	}
 
 	SetColor(1, 1, 0, 1);
-	FillRect( pCells[g_FruitIdx] );
+	float radius{ g_CellSize / 2 };
+	// FillRect( pCells[g_FruitIdx] );
+	FillEllipse(Point2f{ pCells[g_FruitIdx].left + radius, pCells[g_FruitIdx].bottom + radius }, radius, radius);
 }
 
 /* Function to check if the snake has the fruit or not, returns a bool */
