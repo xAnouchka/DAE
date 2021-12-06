@@ -128,6 +128,7 @@ void InitFruit()
 void InitSnake()
 {
 	// get idx of the middle cell?
+	g_SnakeHeadIdx = GetLinearIndexFrom2DIndex(g_NrRows / 2, g_NrCols / 2, g_NrCols);
 }
 
 /* Function to get the cell index of a point in the screen, returns the index int */
@@ -183,5 +184,6 @@ bool DidSnakeGetFruit()
 void MoveSnake()
 {
 	// maybe make an enum class for the direction? and based on which key it will give the param
+	// snake keeps moving in this direction when button is clicked (dont need a bool because after the initial move it should always be moving somewhere)
 }
 #pragma endregion ownDefinitions

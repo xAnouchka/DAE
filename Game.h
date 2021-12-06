@@ -13,7 +13,8 @@ float g_WindowHeight{ 700 };
 
 #pragma region ownDeclarations
 // Declare your own global variables here
-const float g_CellSize{ 25 }, g_NrCols{ g_WindowWidth / g_CellSize }, g_NrRows{ g_WindowHeight / g_CellSize };
+const float g_CellSize{ 25 };
+const int g_NrCols{ int(g_WindowWidth / g_CellSize) }, g_NrRows{ int(g_WindowHeight / g_CellSize) };
 const int g_GridSize{ int(g_WindowWidth/g_CellSize) * int(g_WindowHeight/g_CellSize) };
 Rectf* pCells{ new Rectf[g_GridSize] {} };
 
