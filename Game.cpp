@@ -195,6 +195,8 @@ void ShowInfo()
 	if (g_ShowInfo)	// boolean to allow for toggleability
 	{
 		// draw info
+		SetColor(0, 0, 0, .7f);
+		FillRect(g_CellSize, g_CellSize, (g_WindowWidth - 2 * g_CellSize), (g_WindowHeight - 2 * g_CellSize));
 	}
 }
 #pragma endregion ownDefinitions
