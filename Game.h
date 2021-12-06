@@ -37,6 +37,8 @@ void MoveSnake();
 bool DidSnakeGetFruit();
 int GetCellIdx(Point2f point);
 
+void ShowInfo();
+
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

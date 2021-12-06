@@ -188,4 +188,14 @@ void MoveSnake()
 	// maybe make an enum class for the direction? and based on which key it will give the param
 	// snake keeps moving in this direction when button is clicked (dont need a bool because after the initial move it should always be moving somewhere)
 }
+
+/* Function to show info about the game, e.g. keybindings */
+void ShowInfo()
+{
+	// THE GAME SHOULD PAUSE SOMEHOW 
+	// half opacity rect as a background overlay
+	// texture from string to show the info 
+	
+	// when click i it should toggle on and off, so maybe a boolean for this
+}
 #pragma endregion ownDefinitions
