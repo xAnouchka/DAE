@@ -24,7 +24,7 @@ float g_AccumulatedTime{};
 
 bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{};
 
-enum class Direction{ left, right, up, down };
+enum class Direction{ left, right, up, down, none };
 Direction g_Dir{};
 
 Texture g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{};

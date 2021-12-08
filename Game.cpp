@@ -11,6 +11,7 @@ void Start()
 	InitFruit();
 	g_ShowInfo = false;
 	g_UpdateFruit = true;
+	g_Dir = Direction::none;
 }
 
 void Draw()
@@ -214,6 +215,8 @@ void MoveSnake(float elapsedSec)
 		case Direction::right:
 			pos.col++;
 			break;
+		case Direction::none:
+			return;
 		}
 
 		//no borders (stops wall warp)
