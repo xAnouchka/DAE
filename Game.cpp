@@ -187,6 +187,7 @@ bool DidSnakeGetFruit()
 	if (g_TailIdx == g_FruitIdx)
 	{
 		g_UpdateFruit = true;
+		++g_Score;
 		return true;
 	}
 	return false;
@@ -195,9 +196,6 @@ bool DidSnakeGetFruit()
 /* Function to move the snake */
 void MoveSnake(float elapsedSec)
 {
-	// maybe make an enum class for the direction? and based on which key it will give the param
-	// snake keeps moving in this direction when button is clicked (dont need a bool because after the initial move it should always be moving somewhere)
-
 	Point pos{ g_TailIdx / g_NrCols, g_TailIdx % g_NrCols };
 
 	switch (g_Dir)

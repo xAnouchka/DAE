@@ -18,7 +18,7 @@ const int g_NrCols{ int(g_WindowWidth / g_CellSize) }, g_NrRows{ int(g_WindowHei
 const int g_GridSize{ int(g_WindowWidth/g_CellSize) * int(g_WindowHeight/g_CellSize) };
 Rectf* pCells{ new Rectf[g_GridSize] {} };
 
-int g_FruitIdx{}, g_TailIdx{}, g_NrFrames{};
+int g_FruitIdx{}, g_TailIdx{}, g_NrFrames{}, g_Score;
 float g_AccumulatedTime{};
 
 bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{};
