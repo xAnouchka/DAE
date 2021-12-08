@@ -18,22 +18,15 @@ const int g_NrCols{ int(g_WindowWidth / g_CellSize) }, g_NrRows{ int(g_WindowHei
 const int g_GridSize{ int(g_WindowWidth/g_CellSize) * int(g_WindowHeight/g_CellSize) };
 Rectf* pCells{ new Rectf[g_GridSize] {} };
 
-int g_FruitIdx{};
-int g_TailIdx{};
-int g_NrFrames{};
-int g_GridCells{ g_NrCols * g_NrRows };
+int g_FruitIdx{}, g_TailIdx{}, g_NrFrames{};
 float g_AccumulatedTime{};
 
-bool g_UpdateFruit{};
-bool g_ShowInfo{};
-bool g_SnakeMoving{};
+bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{};
 
 enum class Direction{ left, right, up, down };
 Direction g_Dir{};
 
-Texture g_InfoTexture;
-Texture g_Info2Texture;
-Texture g_InfoBoxTexture;
+Texture g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{};
 
 // Declare your own functions here
 void InitGrid();
