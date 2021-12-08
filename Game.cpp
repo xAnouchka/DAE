@@ -199,7 +199,7 @@ void MoveSnake(float elapsedSec)
 {
 	if (g_SnakeMoving)
 	{
-		Point pos{ g_TailIdx / g_NrCols, g_TailIdx % g_NrCols };
+		Point2D pos{ g_TailIdx / g_NrCols, g_TailIdx % g_NrCols };
 
 		switch (g_Dir)
 		{

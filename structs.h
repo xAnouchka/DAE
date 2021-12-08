@@ -76,7 +76,7 @@ struct Vector2f
 	float y;
 };
 
-struct Point
+struct Point2D
 {
 	int row;
 	int col;
