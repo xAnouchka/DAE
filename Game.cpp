@@ -27,16 +27,20 @@ void Update(float elapsedSec)
 {
 	// process input, do physics 
 
-	// e.g. Check keyboard state
-	//const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	//if ( pStates[SDL_SCANCODE_RIGHT] )
-	//{
-	//	std::cout << "Right arrow key is down\n";
-	//}
-	//if ( pStates[SDL_SCANCODE_LEFT] && pStates[SDL_SCANCODE_UP])
-	//{
-	//	std::cout << "Left and up arrow keys are down\n";
-	//}
+	MoveSnake(elapsedSec);
+
+	float speedFactor{ 9.f };
+	g_AccumulatedTime += elapsedSec;
+	if (1.0f / speedFactor < g_AccumulatedTime)
+	{
+		g_AccumulatedTime -= 1.0f / speedFactor;
+		MoveSnake(elapsedSec);
+	}
+
+	if (g_ShowInfo)
+	{
+
+	}
 }
 
 void End()
@@ -60,6 +64,28 @@ void OnKeyUpEvent(SDL_Keycode key)
 	{
 	case SDLK_i:
 		g_ShowInfo = !g_ShowInfo;
+		break;
+	}
+
+	//snake controls
+
+	switch (key)
+	{
+	case SDLK_a:
+	case SDLK_LEFT:
+		changeDir(Direction::left);
+		break;
+	case SDLK_d:
+	case SDLK_RIGHT:
+		changeDir(Direction::right);
+		break;
+	case SDLK_w:
+	case SDLK_UP:
+		changeDir(Direction::up);
+		break;
+	case SDLK_s:
+	case SDLK_DOWN:
+		changeDir(Direction::down);
 		break;
 	}
 }
@@ -123,7 +149,7 @@ void InitFruit()
 /* Function to set the snake in middle of the grid when program is opened */
 void InitSnake()
 {
-	g_SnakeHeadIdx = GetLinearIndexFrom2DIndex(g_NrRows / 2, g_NrCols / 2, g_NrCols);
+	g_TailIdx = GetLinearIndexFrom2DIndex(g_NrRows / 2, g_NrCols / 2, g_NrCols);
 }
 
 /* Function to get the cell index of a point in the screen, returns the index int */
@@ -149,7 +175,7 @@ void DrawGrid()
 void DrawSnake()
 {
 	SetColor(1, 0, 0, 1);
-	FillRect(pCells[g_SnakeHeadIdx]);
+	FillRect(pCells[g_TailIdx]);
 }
 
 /* Function to draw the fruit */
@@ -169,7 +195,7 @@ void DrawFruit()
 /* Function to check if the snake has the fruit or not, returns a bool */
 bool DidSnakeGetFruit()
 {
-	if (g_SnakeHeadIdx == g_FruitIdx)
+	if (g_TailIdx == g_FruitIdx)
 	{
 		return true;
 	}
@@ -177,10 +203,46 @@ bool DidSnakeGetFruit()
 }
 
 /* Function to move the snake */
-void MoveSnake()
+void MoveSnake(float elapsedSec)
 {
 	// maybe make an enum class for the direction? and based on which key it will give the param
 	// snake keeps moving in this direction when button is clicked (dont need a bool because after the initial move it should always be moving somewhere)
+
+	Point pos{ g_TailIdx / g_NrCols, g_TailIdx % g_NrCols };
+	pCells[pos.row, pos.col];
+
+	switch (g_Dir)
+	{
+	case  Direction::up:
+		pos.row++;
+		break;
+	case Direction::down:
+		pos.row--;
+		break;
+	case Direction::left:
+		pos.col--;
+		break;
+	case Direction::right:
+		pos.col++;
+		break;
+	}
+
+	//no borders (stops wall warp)
+
+	if (pos.row < 0)
+		pos.row = g_NrRows - 1;
+	else if (g_NrRows < pos.row)
+		pos.row = 0;
+	else if (pos.col < 0)
+		pos.col = g_NrCols - 1;
+	else if (g_NrCols - 1 < pos.col)
+		pos.col = 0;
+	g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
+}
+
+void changeDir(Direction new_direction)
+{
+	g_Dir = new_direction;
 }
 
 /* Function to show info about the game, e.g. keybindings */
@@ -198,9 +260,74 @@ void ShowInfo()
 		
 		// key bindings
 		// authors of game
+		bool success{ TextureFromString("info", "resources/DIN-light.otf", 50, Color4f{ 1,1,1,1 }, g_InfoTexture) };
+
+		Point2f pos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize };
+		DrawTexture(g_InfoTexture, pos);
+
+		success = TextureFromString("controls: ", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.x = g_CellSize * 2 + 5;
+		pos.y -= g_CellSize * 2;
+		DrawTexture(g_Info2Texture, pos);
+
+		success = TextureFromString("w or arrow up - up", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.y -= g_CellSize * 2;
+		DrawTexture(g_Info2Texture, pos);
+
+		success = TextureFromString("a or arrow left - left", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.y -= g_CellSize * 2;
+		DrawTexture(g_Info2Texture, pos);
+
+		success = TextureFromString("s or arrow down - down", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.y -= g_CellSize * 2;
+		DrawTexture(g_Info2Texture, pos);
+
+		success = TextureFromString("d or arrow right - right", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.y -= g_CellSize * 2;
+		DrawTexture(g_Info2Texture, pos);
+
+		success = TextureFromString("i - info", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.y -= g_CellSize * 2;
+		DrawTexture(g_Info2Texture, pos);
+
+		success = TextureFromString("x - quit game", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.y -= g_CellSize * 2;
+		DrawTexture(g_Info2Texture, pos);
+
+		success = TextureFromString("credits: ", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.y -= g_CellSize * 3;
+		DrawTexture(g_Info2Texture, pos);
+
+		success = TextureFromString("Anouchka Thijs, 1DAE13", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.y -= g_CellSize * 2;
+		DrawTexture(g_Info2Texture, pos);
+
+		success = TextureFromString("Angelica Rings, 1DAE12", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		pos.y -= g_CellSize * 2;
+		DrawTexture(g_Info2Texture, pos);
 	}
 
+
+	if (!g_ShowInfo)
+	{
+		SetColor(1, 0, 0, .5f);
+		FillRect(g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 3 * g_CellSize, 4 * g_CellSize, 2 * g_CellSize);
+
+		Point2f pos{ g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 2 * g_CellSize - 10 };
+		bool success{ TextureFromString("press i for info", "resources/DIN-light.otf", 15, Color4f{ 0,0,0,1 }, g_InfoBoxTexture) };
+		DrawTexture(g_InfoBoxTexture, pos);
+	}
 	// maybe a box that says press i for info
 	// maybe a score too?
+}
+
+void SnakeTail(float elapsedSec)
+{
+	DidSnakeGetFruit();
+	if (true)
+	{
+
+	}
+
 }
 #pragma endregion ownDefinitions
