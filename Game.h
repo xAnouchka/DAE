@@ -18,6 +18,7 @@ const int g_NrCols{ int(g_WindowWidth / g_CellSize) }, g_NrRows{ int(g_WindowHei
 const int g_GridSize{ int(g_WindowWidth/g_CellSize) * int(g_WindowHeight/g_CellSize) };
 Rectf* pCells{ new Rectf[g_GridSize] {} };
 
+const Color4f g_White{ 1, 1, 1, 1 };
 int g_FruitIdx{}, g_TailIdx{}, g_NrFrames{}, g_Score;
 float g_AccumulatedTime{};
 

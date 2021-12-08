@@ -196,35 +196,39 @@ bool DidSnakeGetFruit()
 /* Function to move the snake */
 void MoveSnake(float elapsedSec)
 {
-	Point pos{ g_TailIdx / g_NrCols, g_TailIdx % g_NrCols };
-
-	switch (g_Dir)
+	if (g_SnakeMoving)
 	{
-	case  Direction::up:
-		pos.row++;
-		break;
-	case Direction::down:
-		pos.row--;
-		break;
-	case Direction::left:
-		pos.col--;
-		break;
-	case Direction::right:
-		pos.col++;
-		break;
-	}
+		Point pos{ g_TailIdx / g_NrCols, g_TailIdx % g_NrCols };
 
-	//no borders (stops wall warp)
-	if (pos.row < 0)
-		pos.row = g_NrRows - 1;
-	else if (g_NrRows < pos.row)
-		pos.row = 0;
-	else if (pos.col < 0)
-		pos.col = g_NrCols - 1;
-	else if (g_NrCols - 1 < pos.col)
-		pos.col = 0;
-	g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
-	DidSnakeGetFruit();
+		switch (g_Dir)
+		{
+		case  Direction::up:
+			pos.row++;
+			break;
+		case Direction::down:
+			pos.row--;
+			break;
+		case Direction::left:
+			pos.col--;
+			break;
+		case Direction::right:
+			pos.col++;
+			break;
+		}
+
+		//no borders (stops wall warp)
+		if (pos.row < 0)
+			pos.row = g_NrRows - 1;
+		else if (g_NrRows < pos.row)
+			pos.row = 0;
+		else if (pos.col < 0)
+			pos.col = g_NrCols - 1;
+		else if (g_NrCols - 1 < pos.col)
+			pos.col = 0;
+
+		g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
+		DidSnakeGetFruit();
+	}
 }
 
 void changeDir(Direction new_direction)
@@ -239,60 +243,63 @@ void ShowInfo()
 	
 	if (g_ShowInfo)	// boolean to allow for toggleability
 	{
+		g_SnakeMoving = false;
+
 		SetColor(0, 0, 0, .7f);
 		FillRect(g_CellSize, g_CellSize, (g_WindowWidth - 2 * g_CellSize), (g_WindowHeight - 2 * g_CellSize));
 		
 		// key bindings
 		// authors of game
-		bool success{ TextureFromString("info", "resources/DIN-light.otf", 50, Color4f{ 1,1,1,1 }, g_InfoTexture) };
+		bool success{ TextureFromString("info", "resources/DIN-light.otf", 50, g_White, g_InfoTexture) };
 
 		Point2f pos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize };
 		DrawTexture(g_InfoTexture, pos);
 
-		success = TextureFromString("controls: ", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("controls: ", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.x = g_CellSize * 2 + 5;
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 
-		success = TextureFromString("w or arrow up - up", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("w or arrow up - up", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 
-		success = TextureFromString("a or arrow left - left", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("a or arrow left - left", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 
-		success = TextureFromString("s or arrow down - down", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("s or arrow down - down", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 
-		success = TextureFromString("d or arrow right - right", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("d or arrow right - right", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 
-		success = TextureFromString("i - info", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("i - info", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 
-		success = TextureFromString("x - quit game", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("x - quit game", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 
-		success = TextureFromString("credits: ", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("credits: ", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.y -= g_CellSize * 3;
 		DrawTexture(g_Info2Texture, pos);
 
-		success = TextureFromString("Anouchka Thijs, 1DAE13", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("Anouchka Thijs, 1DAEGDE13", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 
-		success = TextureFromString("Angelica Rings, 1DAE12", "resources/DIN-light.otf", 25, Color4f{ 1,1,1,1 }, g_Info2Texture);
+		success = TextureFromString("Angelica Rings, 1DAEGDE12", "resources/DIN-light.otf", 25, g_White, g_Info2Texture);
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 	}
 
 	if (!g_ShowInfo)
 	{
+		g_SnakeMoving = true;
 		SetColor(1, 0, 0, .5f);
 		FillRect(g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 3 * g_CellSize, 4 * g_CellSize, 2 * g_CellSize);
 
