@@ -25,10 +25,6 @@ void Draw()
 
 void Update(float elapsedSec)
 {
-	// process input, do physics 
-
-	MoveSnake(elapsedSec);
-
 	float speedFactor{ 9.f };
 	g_AccumulatedTime += elapsedSec;
 	if (1.0f / speedFactor < g_AccumulatedTime)
@@ -59,18 +55,11 @@ void OnKeyDownEvent(SDL_Keycode key)
 
 void OnKeyUpEvent(SDL_Keycode key)
 {
-	// keys wasd or arrows -> change g_Dir
 	switch (key)
 	{
 	case SDLK_i:
 		g_ShowInfo = !g_ShowInfo;
 		break;
-	}
-
-	//snake controls
-
-	switch (key)
-	{
 	case SDLK_a:
 	case SDLK_LEFT:
 		changeDir(Direction::left);
@@ -209,7 +198,6 @@ void MoveSnake(float elapsedSec)
 	// snake keeps moving in this direction when button is clicked (dont need a bool because after the initial move it should always be moving somewhere)
 
 	Point pos{ g_TailIdx / g_NrCols, g_TailIdx % g_NrCols };
-	pCells[pos.row, pos.col];
 
 	switch (g_Dir)
 	{
@@ -228,7 +216,6 @@ void MoveSnake(float elapsedSec)
 	}
 
 	//no borders (stops wall warp)
-
 	if (pos.row < 0)
 		pos.row = g_NrRows - 1;
 	else if (g_NrRows < pos.row)
@@ -306,7 +293,6 @@ void ShowInfo()
 		pos.y -= g_CellSize * 2;
 		DrawTexture(g_Info2Texture, pos);
 	}
-
 
 	if (!g_ShowInfo)
 	{
