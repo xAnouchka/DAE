@@ -186,6 +186,7 @@ bool DidSnakeGetFruit()
 {
 	if (g_TailIdx == g_FruitIdx)
 	{
+		g_UpdateFruit = true;
 		return true;
 	}
 	return false;
@@ -225,6 +226,7 @@ void MoveSnake(float elapsedSec)
 	else if (g_NrCols - 1 < pos.col)
 		pos.col = 0;
 	g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
+	DidSnakeGetFruit();
 }
 
 void changeDir(Direction new_direction)
@@ -236,9 +238,6 @@ void changeDir(Direction new_direction)
 void ShowInfo()
 {
 	// THE GAME SHOULD PAUSE SOMEHOW -> when g_ShowInfo is on, stop moving the snake -> bool for moving the snake? or reuse g_ShowInfo
-	
-	// half opacity rect as a background overlay
-	// texture from string to show the info 
 	
 	if (g_ShowInfo)	// boolean to allow for toggleability
 	{
@@ -303,7 +302,7 @@ void ShowInfo()
 		bool success{ TextureFromString("press i for info", "resources/DIN-light.otf", 15, Color4f{ 0,0,0,1 }, g_InfoBoxTexture) };
 		DrawTexture(g_InfoBoxTexture, pos);
 	}
-	// maybe a box that says press i for info
+
 	// maybe a score too?
 }
 
