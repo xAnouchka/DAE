@@ -141,23 +141,14 @@ void InitFruit()
 /* Function to set the snake in middle of the grid when program is opened */
 void InitSnake()
 {
+	const int initialSize{ 1 };
 	g_Snake = new int[g_GridSize];
 	Point2D center{ g_NrRows / 2, g_NrCols / 2 };
 	g_Snake[0] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
-	center.col--;
-	g_Snake[1] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
-	center.col--;
-	g_Snake[2] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
-	center.col--;
-	g_Snake[3] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
-	center.col--;
-	g_Snake[4] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
-	g_SnakeLength = 5;
+	g_SnakeLength = initialSize;
 }
 
 #pragma endregion initFunctions
-
-
 
 #pragma region DrawFunctions
 
@@ -289,11 +280,11 @@ void MoveSnake(float elapsedSec)
 		//no borders (stops wall warp)
 		if (pos.row < 0)
 			pos.row = g_NrRows - 1;
-		else if (g_NrRows < pos.row)
+		else if (g_NrRows - 1 < pos.row)
 			pos.row = 0;
 		else if (pos.col < 0)
 			pos.col = g_NrCols - 1;
-		else if (g_NrCols < pos.col)
+		else if (g_NrCols - 1 < pos.col)
 			pos.col = 0;
 		for (int i{ g_SnakeLength - 1 }; 0 < i; --i)
 		{
