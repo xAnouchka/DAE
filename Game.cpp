@@ -13,6 +13,18 @@ void Start()
 	g_ShowInfo = false;
 	g_UpdateFruit = true;
 	g_Dir = Direction::none;
+
+	bool success{ TextureFromString("info", "resources/DIN-light.otf", 50, Color4f{ 1,1,1,1 }, g_InfoTexture) };
+	if (!success) std::cout << "Failed loading g_InfoTexture";
+	success = { TextureFromString("credits", "resources/DIN-light.otf", 50, Color4f{ 1,1,1,1 }, g_Info2Texture) };
+	if (!success) std::cout << "Failed loading g_Info2Texture";
+	success = { TextureFromString("press i for info", "resources/DIN-light.otf", 15, Color4f{ 0,0,0,1 }, g_InfoBoxTexture) };
+	if (!success) std::cout << "Failed loading g_Info2Texture";
+
+	success = { TextureFromString("score: ", "resources/DIN-light.otf", 20, Color4f{0,0,0,1}, g_ScoreTexture) };
+	if (!success) std::cout << "Failed loading g_Info2Texture";
+	success = TextureFromString(std::to_string(g_Score), "resources/DIN-light.otf", 20, Color4f{ 0,0,0,1 }, g_ScoreNrTexture);
+	if (!success) std::cout << "Failed loading g_Info2Texture";
 }
 
 void Draw()
@@ -42,6 +54,11 @@ void End()
 	pCells = nullptr;
 
 	DeleteTexture(g_SnakeGraphics);
+	DeleteTexture(g_InfoTexture);
+	DeleteTexture(g_Info2Texture);
+	DeleteTexture(g_InfoBoxTexture);
+	DeleteTexture(g_ScoreTexture);
+	DeleteTexture(g_ScoreNrTexture);
 }
 #pragma endregion gameFunctions
 
@@ -312,12 +329,8 @@ void ShowInfo()
 
 		SetColor(0, 0, 0, .7f);
 		FillRect(g_CellSize, g_CellSize, (g_WindowWidth - 2 * g_CellSize), (g_WindowHeight - 2 * g_CellSize));
-		
-		// key bindings
-		// authors of game
-		bool success{ TextureFromString("info", "resources/DIN-light.otf", 50, Color4f{ 1,1,1,1 }, g_InfoTexture) };
+
 		DrawTexture(g_InfoTexture, g_InfoPos);
-		DeleteTexture(g_InfoTexture);
 
 		const int fontSize{ 25 };
 		const int nrLines{ 5 };
@@ -329,19 +342,20 @@ void ShowInfo()
 		  "S or Down key to move snake down",
 		  "D or Right key to move snake right",
 		};
+
 		for (int i{ 0 }; i < nrLines; ++i)
 		{
 			Texture textTexture{};
 			bool successful{ TextureFromString(pGameInfo[i], "Resources/DIN-Light.otf", fontSize,
 							 Color4f{ 1.0f, 1.0f, 1.0f, 1.0f }, textTexture) };
 			if (successful)
+			{
 				DrawTexture(textTexture, Point2f{ g_WindowWidth / 4, g_InfoPos.y - (textTexture.height * (i + 1)) });
+			}
 			DeleteTexture(textTexture);
 		}
 
-		success = { TextureFromString("credits", "resources/DIN-light.otf", 50, Color4f{ 1,1,1,1 }, g_Info2Texture) };
 		DrawTexture(g_Info2Texture, g_CreditPos);
-		DeleteTexture(g_Info2Texture);
 
 		const int nrLines2{ 2 };
 		std::string pGameInfo2[nrLines2]
@@ -355,13 +369,13 @@ void ShowInfo()
 			bool successful{ TextureFromString(pGameInfo2[i], "Resources/DIN-Light.otf", fontSize,
 							 Color4f{ 1.0f, 1.0f, 1.0f, 1.0f }, text2Texture) };
 			if (successful)
+			{ 
 				DrawTexture(text2Texture, Point2f{ g_WindowWidth / 4, g_CreditPos.y - (text2Texture.height * (i + 1)) });
+			}
+
 			DeleteTexture(text2Texture);
 		}
 	}
-
-	int scorestring = g_Score;
-	std::string score = std::to_string(scorestring);
 
 	if (!g_ShowInfo)
 	{
@@ -370,21 +384,16 @@ void ShowInfo()
 		FillRect(g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 3 * g_CellSize, 4 * g_CellSize, 2 * g_CellSize);
 
 		Point2f pos{ g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 2 * g_CellSize - 10 };
-		bool success{ TextureFromString("press i for info", "resources/DIN-light.otf", 15, Color4f{ 0,0,0,1 }, g_InfoBoxTexture) };
 		DrawTexture(g_InfoBoxTexture, pos);
 
 		SetColor(0, 0, 1, .5f);
 		FillRect(g_WindowWidth - 8 * g_CellSize, g_WindowHeight - 6 * g_CellSize, 7 * g_CellSize, 2 * g_CellSize);
 
 		pos = Point2f{ g_WindowWidth - 7 * g_CellSize, g_WindowHeight - 5 * g_CellSize - 10 };
-		success = { TextureFromString("score: ", "resources/DIN-light.otf", 20, Color4f{0,0,0,1}, g_ScoreTexture) };
 		DrawTexture(g_ScoreTexture, pos);
-		DeleteTexture(g_ScoreTexture);
 
 		pos.x += g_CellSize * 2.5f;
-		success = TextureFromString(score, "resources/DIN-light.otf", 20, Color4f{ 0,0,0,1 }, g_ScoreNrTexture);
 		DrawTexture(g_ScoreTexture, pos);
-		DeleteTexture(g_ScoreNrTexture);
 	}
 }
 
