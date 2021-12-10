@@ -148,7 +148,7 @@ void InitFruit()
 /* Function to set the snake in middle of the grid when program is opened */
 void InitSnake()
 {
-	g_TailIdx = GetLinearIndexFrom2DIndex(g_NrRows / 2, g_NrCols / 2, g_NrCols);
+	g_HeadIdx = GetLinearIndexFrom2DIndex(g_NrRows / 2, g_NrCols / 2, g_NrCols);
 }
 
 /* Function to get the cell index of a point in the screen, returns the index int */
@@ -173,10 +173,7 @@ void DrawGrid()
 /* Function to draw the snake (current: 1 rect big) */
 void DrawSnake()
 {
-	//SetColor(1, 0, 0, 1);
-	//FillRect(pCells[g_TailIdx]);
-
-	Rectf srcRect{ 3, 255, 60, 64 }, dstRect{ pCells[g_TailIdx].left, pCells[g_TailIdx].bottom, g_CellSize, g_CellSize };
+	Rectf srcRect{ 0, 0, 60, 64 }, dstRect{ pCells[g_HeadIdx].left, pCells[g_HeadIdx].bottom, g_CellSize, g_CellSize };
 
 	switch (g_Dir)
 	{
@@ -223,7 +220,7 @@ void DrawFruit()
 /* Function to check if the snake has the fruit or not, returns a bool */
 bool DidSnakeGetFruit()
 {
-	if (g_TailIdx == g_FruitIdx)
+	if (g_HeadIdx == g_FruitIdx)
 	{
 		g_UpdateFruit = true;
 		++g_Score;
@@ -237,7 +234,7 @@ void MoveSnake(float elapsedSec)
 {
 	if (g_SnakeMoving)
 	{
-		Point2D pos{ g_TailIdx / g_NrCols, g_TailIdx % g_NrCols };
+		Point2D pos{ g_HeadIdx / g_NrCols, g_HeadIdx % g_NrCols };
 
 		switch (g_Dir)
 		{
@@ -267,7 +264,7 @@ void MoveSnake(float elapsedSec)
 		else if (g_NrCols - 1 < pos.col)
 			pos.col = 0;
 
-		g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
+		g_HeadIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
 		DidSnakeGetFruit();
 	}
 }

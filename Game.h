@@ -19,7 +19,7 @@ const int g_GridSize{ int(g_WindowWidth/g_CellSize) * int(g_WindowHeight/g_CellS
 Rectf* pCells{ new Rectf[g_GridSize] {} };
 
 const Color4f g_White{ 1, 1, 1, 1 };
-int g_FruitIdx{}, g_TailIdx{}, g_NrFrames{}, g_Score{};
+int g_FruitIdx{}, g_HeadIdx{}, g_NrFrames{}, g_Score{};
 float g_AccumulatedTime{};
 
 const Point2f g_InfoPos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize }, g_CreditPos{ g_WindowWidth / 2 - 70, g_WindowHeight / 2 };
