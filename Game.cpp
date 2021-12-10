@@ -12,14 +12,14 @@ void Start()
 	InitFruit();
 	g_ShowInfo = false;
 	g_UpdateFruit = true;
-	g_Dir = Direction::none;
+	g_Dir = Direction::right;
 }
 
 void Draw()
 {
 	ClearBackground();
-
 	DrawGrid();
+	DrawSnake();
 	DrawSnakeHead();
 	DrawFruit();
 	ShowInfo();
@@ -40,7 +40,8 @@ void End()
 {
 	delete[] pCells;
 	pCells = nullptr;
-
+	delete[] g_Snake;
+	g_Snake = nullptr;
 	DeleteTexture(g_SnakeGraphics);
 }
 #pragma endregion gameFunctions
@@ -81,37 +82,21 @@ void OnKeyUpEvent(SDL_Keycode key)
 
 void OnMouseMotionEvent(const SDL_MouseMotionEvent& e)
 {
-	//std::cout << "  [" << e.x << ", " << e.y << "]\n";
-	//Point2f mousePos{ float( e.x ), float( g_WindowHeight - e.y ) };
 }
 
 void OnMouseDownEvent(const SDL_MouseButtonEvent& e)
 {
-
 }
 
 void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 {
-	////std::cout << "  [" << e.x << ", " << e.y << "]\n";
-	//switch (e.button)
-	//{
-	//case SDL_BUTTON_LEFT:
-	//{
-	//	//std::cout << "Left mouse button released\n";
-	//	//Point2f mousePos{ float( e.x ), float( g_WindowHeight - e.y ) };
-	//	break;
-	//}
-	//case SDL_BUTTON_RIGHT:
-	//	//std::cout << "Right mouse button released\n";
-	//	break;
-	//case SDL_BUTTON_MIDDLE:
-	//	//std::cout << "Middle mouse button released\n";
-	//	break;
-	//}
 }
 #pragma endregion inputHandling
 
 #pragma region ownDefinitions
+
+#pragma region initialisingFunctions
+
 void InitSnakeTextures()
 {
 	// pos3, 255 size57x63 apple
@@ -148,32 +133,50 @@ void InitFruit()
 /* Function to set the snake in middle of the grid when program is opened */
 void InitSnake()
 {
-	g_HeadIdx = GetLinearIndexFrom2DIndex(g_NrRows / 2, g_NrCols / 2, g_NrCols);
+	g_Snake = new int[g_GridSize];
+	Point2D center{ g_NrRows / 2, g_NrCols / 2 };
+	g_Snake[0] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
+	center.col--;
+	g_Snake[1] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
+	center.col--;
+	g_Snake[2] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
+	center.col--;
+	g_Snake[3] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
+	center.col--;
+	g_Snake[4] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
+	g_SnakeLength = 5;
 }
 
-/* Function to get the cell index of a point in the screen, returns the index int */
-int GetCellIdx(const Point2f& point)
-{
-	for (int i = 0; i < g_GridSize; i++)
-	{
-		if (IsPointInRect(point, pCells[i])) return i;
-	}
-	return 0;
-}
+#pragma endregion initialisingFunctions
+
+
+
+#pragma region DrawFunctions
 
 /* Function to draw the grid based on rects in array */
 void DrawGrid()
 {
 	SetColor(.2f, .2f, .2f, 1);
-	for (int i{ 0 }; i < g_GridSize; i++) {
+	for (int i{ 0 }; i < g_GridSize; i++)
+	{
 		DrawRect(pCells[i]);
+	}
+}
+
+void DrawSnake()
+{
+	for (int i = 0; i < g_SnakeLength; i++)
+	{
+		//Point2D pos{ Get2DIndexFromLinearIndex(g_Snake[i], g_NrCols) };
+		SetColor(0.0f, 0.7f, 0.0f);
+		FillRect(pCells[g_Snake[i]]);
 	}
 }
 
 /* Function to draw the snake (current: 1 rect big) */
 void DrawSnakeHead()
 {
-	Rectf srcRect{ 0, 0, 60, 64 }, dstRect{ pCells[g_HeadIdx].left, pCells[g_HeadIdx].bottom, g_CellSize, g_CellSize };
+	Rectf srcRect{ 0, 0, 60, 64 }, dstRect{ pCells[g_Snake[0]].left, pCells[g_Snake[0]].bottom, g_CellSize, g_CellSize };
 
 	switch (g_Dir)
 	{
@@ -200,8 +203,8 @@ void DrawSnakeHead()
 
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 
-	DrawSnakeBody();
-	DrawSnakeTail();
+	//DrawSnakeBody();
+	//DrawSnakeTail();
 }
 
 void DrawSnakeBody()
@@ -214,7 +217,7 @@ void DrawSnakeTail()
 	int g_TailIdx{};
 	Rectf srcRect{ 0, 0, 53, 60 };
 
-	Point2D pos{ g_HeadIdx / g_NrCols, g_HeadIdx % g_NrCols };
+	Point2D pos{ g_Snake[0] / g_NrCols, g_Snake[0] % g_NrCols };
 	switch (g_Dir)
 	{
 	case  Direction::up:
@@ -263,10 +266,12 @@ void DrawFruit()
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 }
 
+#pragma endregion DrawFunctions
+
 /* Function to check if the snake has the fruit or not, returns a bool */
 bool DidSnakeGetFruit()
 {
-	if (g_HeadIdx == g_FruitIdx)
+	if (g_Snake[0] == g_FruitIdx)
 	{
 		g_UpdateFruit = true;
 		++g_Score;
@@ -280,8 +285,8 @@ void MoveSnake(float elapsedSec)
 {
 	if (g_SnakeMoving)
 	{
-		Point2D pos{ g_HeadIdx / g_NrCols, g_HeadIdx % g_NrCols };
-
+		//Point2D pos{ g_Snake[0] / g_NrCols, g_Snake[0] % g_NrCols };
+		Point2D pos{ Get2DIndexFromLinearIndex(g_Snake[0], g_NrCols) };
 		switch (g_Dir)
 		{
 		case  Direction::up:
@@ -299,7 +304,6 @@ void MoveSnake(float elapsedSec)
 		case Direction::none:
 			return;
 		}
-
 		//no borders (stops wall warp)
 		if (pos.row < 0)
 			pos.row = g_NrRows - 1;
@@ -307,10 +311,13 @@ void MoveSnake(float elapsedSec)
 			pos.row = 0;
 		else if (pos.col < 0)
 			pos.col = g_NrCols - 1;
-		else if (g_NrCols - 1 < pos.col)
+		else if (g_NrCols < pos.col)
 			pos.col = 0;
-
-		g_HeadIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
+		for (int i{ g_SnakeLength - 1}; 0 < i; --i)
+		{
+			g_Snake[i] = g_Snake[i - 1];
+		}
+		g_Snake[0] = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
 		DidSnakeGetFruit();
 	}
 }
@@ -324,7 +331,7 @@ void ShowInfo()
 
 		SetColor(0, 0, 0, .7f);
 		FillRect(g_CellSize, g_CellSize, (g_WindowWidth - 2 * g_CellSize), (g_WindowHeight - 2 * g_CellSize));
-		
+
 		// key bindings
 		// authors of game
 		bool success{ TextureFromString("info", "resources/DIN-light.otf", 50, Color4f{ 1,1,1,1 }, g_InfoTexture) };
@@ -418,4 +425,15 @@ void PrintInfo()
 	std::cout << "S or Down key to move snake down" << std::endl;
 	std::cout << "D or Right key to move snake right" << std::endl;
 }
+
+/* Function to get the cell index of a point in the screen, returns the index int */
+int GetCellIdx(const Point2f& point)
+{
+	for (int i = 0; i < g_GridSize; i++)
+	{
+		if (IsPointInRect(point, pCells[i])) return i;
+	}
+	return 0;
+}
+
 #pragma endregion ownDefinitions
