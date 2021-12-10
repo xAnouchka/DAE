@@ -18,22 +18,19 @@ const int g_NrCols{ int(g_WindowWidth / g_CellSize) }, g_NrRows{ int(g_WindowHei
 const int g_GridSize{ int(g_WindowWidth/g_CellSize) * int(g_WindowHeight/g_CellSize) };
 Rectf* pCells{ new Rectf[g_GridSize] {} };
 
-const Color4f g_White{ 1, 1, 1, 1 };
+const Color4f g_White{ 1, 1, 1, 1 }, g_Black{ 0, 0, 0, 1 };
 int g_FruitIdx{}, g_HeadIdx{}, g_NrFrames{}, g_Score{};
 float g_AccumulatedTime{};
-
-const Point2f g_InfoPos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize }, g_CreditPos{ g_WindowWidth / 2 - 70, g_WindowHeight / 2 };
 
 bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{};
 
 enum class Direction{ left, right, up, down, none };
 Direction g_Dir{};
 
-Texture g_SnakeGraphics{};
-Texture g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{};
+Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{};
 
 // Declare your own functions here
-void InitSnakeTextures();
+void InitTextures();
 void InitGrid();
 void InitSnake();
 void InitFruit();
@@ -51,7 +48,7 @@ int GetCellIdx(const Point2f& point);
 
 void ShowInfo();
 void PrintInfo();
-void SnakeTail(float elapsedSec);
+void DrawInfo();
 #pragma endregion ownDeclarations
 
 #pragma region gameFunctions											

@@ -6,23 +6,14 @@
 #pragma region gameFunctions											
 void Start()
 {
-	InitSnakeTextures();
+	InitTextures();
 	InitGrid();
 	InitSnake();
 	InitFruit();
+
 	g_ShowInfo = false;
 	g_UpdateFruit = true;
 	g_Dir = Direction::none;
-
-	bool success{ TextureFromString("info", "resources/DIN-light.otf", 50, Color4f{ 1,1,1,1 }, g_InfoTexture) };
-	if (!success) std::cout << "Failed loading g_InfoTexture";
-	success = { TextureFromString("credits", "resources/DIN-light.otf", 50, Color4f{ 1,1,1,1 }, g_Info2Texture) };
-	if (!success) std::cout << "Failed loading g_Info2Texture";
-	success = { TextureFromString("press i for info", "resources/DIN-light.otf", 15, Color4f{ 0,0,0,1 }, g_InfoBoxTexture) };
-	if (!success) std::cout << "Failed loading g_Info2Texture";
-
-	success = { TextureFromString("score: ", "resources/DIN-light.otf", 20, Color4f{0,0,0,1}, g_ScoreTexture) };
-	if (!success) std::cout << "Failed loading g_ScoreTexture";
 }
 
 void Draw()
@@ -127,14 +118,19 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 #pragma endregion inputHandling
 
 #pragma region ownDefinitions
-void InitSnakeTextures()
+void InitTextures()
 {
-	// pos3, 255 size57x63 apple
-	bool succes{ TextureFromFile("Resources/snake-graphics.png", g_SnakeGraphics) };
-	if (!succes)
-	{
-		std::cout << "Failed to load snake texture";
-	}
+	bool success{ TextureFromFile("Resources/snake-graphics.png", g_SnakeGraphics) };
+	if (!success) std::cout << "Failed to load snake texture";
+	success = { TextureFromFile("Resources/info.png", g_InfoBoxTexture) };
+	if (!success) std::cout << "Failed loading g_InfoBoxTexture";
+
+	success = { TextureFromString("controls", "Resources/DIN-light.otf", 50, g_White, g_InfoTexture) };
+	if (!success) std::cout << "Failed loading g_InfoTexture";
+	success = { TextureFromString("credits", "Resources/DIN-light.otf", 50, g_White, g_Info2Texture) };
+	if (!success) std::cout << "Failed loading g_Info2Texture";
+	success = { TextureFromString("score: ", "Resources/DIN-light.otf", 20, g_Black, g_ScoreTexture) };
+	if (!success) std::cout << "Failed loading g_ScoreTexture";
 }
 
 /* Function to add all the cells to the array pCells */
@@ -324,96 +320,89 @@ void ShowInfo()
 	if (g_ShowInfo)	// boolean to allow for toggleability
 	{
 		g_SnakeMoving = false;
-
-		SetColor(0, 0, 0, .7f);
-		FillRect(g_CellSize, g_CellSize, (g_WindowWidth - 2 * g_CellSize), (g_WindowHeight - 2 * g_CellSize));
-
-		DrawTexture(g_InfoTexture, g_InfoPos);
-
-		const int fontSize{ 25 };
-		const int nrLines{ 5 };
-		std::string pGameInfo[nrLines]
-		{
-		  "controls: ",
-		  "W or Up key to move snake up",
-		  "A or Left key to move snake left",
-		  "S or Down key to move snake down",
-		  "D or Right key to move snake right",
-		};
-
-		for (int i{ 0 }; i < nrLines; ++i)
-		{
-			Texture textTexture{};
-			bool successful{ TextureFromString(pGameInfo[i], "Resources/DIN-Light.otf", fontSize,
-							 Color4f{ 1.0f, 1.0f, 1.0f, 1.0f }, textTexture) };
-			if (successful)
-			{
-				DrawTexture(textTexture, Point2f{ g_WindowWidth / 4, g_InfoPos.y - (textTexture.height * (i + 1)) });
-			}
-			DeleteTexture(textTexture);
-		}
-
-		DrawTexture(g_Info2Texture, g_CreditPos);
-
-		const int nrLines2{ 2 };
-		std::string pGameInfo2[nrLines2]
-		{
-		  "Anouchka Thijs, 1DAE13",
-		  "Angelica Rings, 1DAE12"
-		};
-		for (int i{ 0 }; i < nrLines2; ++i)
-		{
-			Texture text2Texture{};
-			bool successful{ TextureFromString(pGameInfo2[i], "Resources/DIN-Light.otf", fontSize,
-							 Color4f{ 1.0f, 1.0f, 1.0f, 1.0f }, text2Texture) };
-			if (successful)
-			{ 
-				DrawTexture(text2Texture, Point2f{ g_WindowWidth / 4, g_CreditPos.y - (text2Texture.height * (i + 1)) });
-			}
-
-			DeleteTexture(text2Texture);
-		}
+		DrawInfo();
 	}
 
 	if (!g_ShowInfo)
 	{
 		g_SnakeMoving = true;
-		SetColor(1, 0, 0, .5f);
-		FillRect(g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 3 * g_CellSize, 4 * g_CellSize, 2 * g_CellSize);
 
-		Point2f pos{ g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 2 * g_CellSize - 10 };
-		DrawTexture(g_InfoBoxTexture, pos);
+		// info
+		Point2f pos{ g_WindowWidth - 3 * g_CellSize, g_WindowHeight - 2 * g_CellSize - 10 };
+		Rectf dstRect{pos.x, pos.y, 50, 50};
+		DrawTexture(g_InfoBoxTexture, dstRect);
 
+		// score
 		SetColor(0, 0, 1, .5f);
-		FillRect(g_WindowWidth - 8 * g_CellSize, g_WindowHeight - 6 * g_CellSize, 7 * g_CellSize, 2 * g_CellSize);
+		FillRect(g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 6 * g_CellSize, 4 * g_CellSize, 2 * g_CellSize);
 
-		pos = Point2f{ g_WindowWidth - 7 * g_CellSize, g_WindowHeight - 5 * g_CellSize - 10 };
+		pos = Point2f{ g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 5 * g_CellSize - 10 };
 		DrawTexture(g_ScoreTexture, pos);
 
+
 		pos.x += g_CellSize * 2.5f;
-		bool success{ TextureFromString(std::to_string(g_Score), "resources/DIN-light.otf", 20, Color4f{ 0,0,0,1 }, g_ScoreNrTexture) };
+		bool success{ TextureFromString(std::to_string(g_Score), "resources/DIN-light.otf", 20, g_Black, g_ScoreNrTexture) };
 		if (!success) std::cout << "Failed loading g_ScoreNrTexture";
 		DrawTexture(g_ScoreNrTexture, pos);
 		DeleteTexture(g_ScoreNrTexture);
 	}
 }
 
-void SnakeTail(float elapsedSec)
-{
-	DidSnakeGetFruit();
-	if (true)
-	{
-
-	}
-
-}
-
+/* Function to print the controls to the console */
 void PrintInfo()
 {
-	std::cout << "controls: " << std::endl;
-	std::cout << "W or Up key to move snake up" << std::endl;
-	std::cout << "A or Left key to move snake left" << std::endl;
-	std::cout << "S or Down key to move snake down" << std::endl;
-	std::cout << "D or Right key to move snake right" << std::endl;
+	std::cout << "Controls:\n";
+	std::cout << "W or Up key to move snake up\n";
+	std::cout << "A or Left key to move snake left\n";
+	std::cout << "S or Down key to move snake down\n";
+	std::cout << "D or Right key to move snake right\n";
+}
+
+/* Function to print controls and credit info in game */
+void DrawInfo()
+{
+	// Black Background Overlay
+	SetColor(0, 0, 0, .7f);
+	FillRect(g_CellSize, g_CellSize, (g_WindowWidth - 2 * g_CellSize), (g_WindowHeight - 2 * g_CellSize));
+
+	// Info text
+	const Point2f infoPos{ g_WindowWidth / 2 - 40, g_WindowHeight - 4 * g_CellSize }, creditPos{ g_WindowWidth / 2 - 70, g_WindowHeight / 2 };
+	const int fontSize{ 25 }, nrLines{ 7 };
+	Texture textTexture{};
+	Point2f posText{};
+
+	std::string pGameInfo[nrLines]
+	{
+	  "W or Up key to move snake up",
+	  "A or Left key to move snake left",
+	  "S or Down key to move snake down",
+	  "D or Right key to move snake right",
+	  "",
+	  "Anouchka Thijs, 1DAEGDE13",
+	  "Angelica Rings, 1DAEGDE12"
+	};
+
+	DrawTexture(g_InfoTexture, infoPos);
+	for (int i{ 0 }; i < nrLines; ++i)
+	{
+		bool successful{ TextureFromString(pGameInfo[i], "Resources/DIN-Light.otf", fontSize, g_White, textTexture) };
+
+		if (i < 4)
+		{
+			posText = Point2f{ g_WindowWidth / 4, infoPos.y - (textTexture.height * (i + 1)) };
+		}
+		else if (i == 4)
+		{
+			DrawTexture(g_Info2Texture, creditPos);
+		}
+		else if (i > 4)
+		{
+			posText = Point2f{ g_WindowWidth / 4, infoPos.y - (textTexture.height * (i + 4)) };
+		}
+
+		if (successful) DrawTexture(textTexture, posText);
+
+		DeleteTexture(textTexture);
+	}
 }
 #pragma endregion ownDefinitions
