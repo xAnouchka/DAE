@@ -524,7 +524,7 @@ namespace utils
 	bool IsOverlapping(const Circlef& circle1, const Circlef& circle2)
 	{
 		float distSq{}, radsumSq{};
-		distSq = powf((circle1.center.x - circle2.center.x),2 ) + powf((circle1.center.y - circle2.center.y), 2);
+		distSq = powf((circle1.center.x - circle2.center.x), 2) + powf((circle1.center.y - circle2.center.y), 2);
 		radsumSq = powf((circle1.radius + circle2.radius), 2);
 
 		if (distSq == radsumSq)
@@ -546,13 +546,14 @@ namespace utils
 	bool IsOverlapping(const Rectf& rect1, const Rectf& rect2)
 	{
 		Point2f l1{ rect1.left, rect1.bottom + rect1.height }, r1{ rect1.left + rect1.width, rect1.bottom };
-		Point2f l2{ rect2.left, rect2.bottom + rect2.height}, r2{rect2.left + rect2.width, rect2.bottom};
+		Point2f l2{ rect2.left, rect2.bottom + rect2.height }, r2{ rect2.left + rect2.width, rect2.bottom };
 		// To check if either rectangle is actually a line
 		// For example :  l1 ={-1,0}  r1={1,1}  l2={0,-1}
 		// r2={0,1}
 
 		if (l1.x == r1.x || l1.y == r1.y || l2.x == r2.x
-			|| l2.y == r2.y) {
+			|| l2.y == r2.y)
+		{
 			// the line cannot have positive overlap
 			return false;
 		}
@@ -773,7 +774,8 @@ namespace utils
 	void Shuffle(int* pInt, int size, int amount)
 	{
 		int idx1{}, idx2{};
-		for (int i{ 0 }; i < amount; i++) {
+		for (int i{ 0 }; i < amount; i++)
+		{
 			idx1 = std::rand() % size;
 			idx2 = std::rand() % size;
 			Swap(pInt, idx1, idx2);
@@ -783,7 +785,8 @@ namespace utils
 	void Shuffle(Texture* pText, int size, int amount)
 	{
 		int idx1{}, idx2{};
-		for (int i{ 0 }; i < amount; i++) {
+		for (int i{ 0 }; i < amount; i++)
+		{
 			idx1 = std::rand() % size;
 			idx2 = std::rand() % size;
 			Swap(pText, idx1, idx2);
@@ -807,6 +810,13 @@ namespace utils
 	int GetLinearIndexFrom2DIndex(int rowIndex, int columnIndex, int nrOfColumns)
 	{
 		return rowIndex * nrOfColumns + columnIndex;
+	}
+
+	Point2D Get2DIndexFromLinearIndex(int linearIndex, int columns)
+	{
+		int row{ linearIndex / columns };
+		int column{ linearIndex % columns };
+		return Point2D{ row, column };
 	}
 #pragma endregion MyUtils
 }
