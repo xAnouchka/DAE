@@ -110,5 +110,6 @@ namespace utils
 	void Shuffle(Texture* pText, int size, int amount);
 	void BubbleSort(int* pInt, int size);
 	int GetLinearIndexFrom2DIndex(int rowIndex, int columnIndex, int nrOfColumns);
+	Point2D Get2DIndexFromLinearIndex(int linearIndex, int columns);
 #pragma endregion MyUtils
 }

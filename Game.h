@@ -15,16 +15,22 @@ float g_WindowHeight{ 700 };
 // Declare your own global variables here
 const float g_CellSize{ 25 };
 const int g_NrCols{ int(g_WindowWidth / g_CellSize) }, g_NrRows{ int(g_WindowHeight / g_CellSize) };
-const int g_GridSize{ int(g_WindowWidth/g_CellSize) * int(g_WindowHeight/g_CellSize) };
+const int g_GridSize{ g_NrCols * g_NrRows };
 Rectf* pCells{ new Rectf[g_GridSize] {} };
 
 const Color4f g_White{ 1, 1, 1, 1 }, g_Black{ 0, 0, 0, 1 };
 int g_FruitIdx{}, g_HeadIdx{}, g_NrFrames{}, g_Score{};
 float g_AccumulatedTime{};
 
+int* g_Snake{};
+int g_SnakeLength{};
+
+const Point2f g_InfoPos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize },
+g_CreditPos{ g_WindowWidth / 2 - 70, g_WindowHeight / 2 };
+
 bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{};
 
-enum class Direction{ left, right, up, down, none };
+enum class Direction { left, right, up, down, none };
 Direction g_Dir{};
 
 Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{};
@@ -36,6 +42,7 @@ void InitSnake();
 void InitFruit();
 
 void DrawGrid();
+void DrawSnake();
 void DrawSnakeHead();
 void DrawSnakeBody();
 void DrawSnakeTail();
