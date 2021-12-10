@@ -125,11 +125,11 @@ void InitTextures()
 	success = { TextureFromFile("Resources/info.png", g_InfoBoxTexture) };
 	if (!success) std::cout << "Failed loading g_InfoBoxTexture";
 
-	success = { TextureFromString("controls", "Resources/DIN-light.otf", 50, g_White, g_InfoTexture) };
+	success = { TextureFromString("Controls", "Resources/DIN-light.otf", 50, g_White, g_InfoTexture) };
 	if (!success) std::cout << "Failed loading g_InfoTexture";
-	success = { TextureFromString("credits", "Resources/DIN-light.otf", 50, g_White, g_Info2Texture) };
+	success = { TextureFromString("Credits", "Resources/DIN-light.otf", 50, g_White, g_Info2Texture) };
 	if (!success) std::cout << "Failed loading g_Info2Texture";
-	success = { TextureFromString("score: ", "Resources/DIN-light.otf", 20, g_Black, g_ScoreTexture) };
+	success = { TextureFromString("Score: ", "Resources/DIN-light.otf", 20, g_Black, g_ScoreTexture) };
 	if (!success) std::cout << "Failed loading g_ScoreTexture";
 }
 
@@ -322,8 +322,7 @@ void ShowInfo()
 		g_SnakeMoving = false;
 		DrawInfo();
 	}
-
-	if (!g_ShowInfo)
+	else
 	{
 		g_SnakeMoving = true;
 
@@ -338,7 +337,6 @@ void ShowInfo()
 
 		pos = Point2f{ g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 5 * g_CellSize - 10 };
 		DrawTexture(g_ScoreTexture, pos);
-
 
 		pos.x += g_CellSize * 2.5f;
 		bool success{ TextureFromString(std::to_string(g_Score), "resources/DIN-light.otf", 20, g_Black, g_ScoreNrTexture) };
