@@ -19,7 +19,7 @@ void Draw()
 {
 	ClearBackground();
 
-	DrawGrid();
+	//DrawGrid();
 	DrawSnakeHead();
 	DrawFruit();
 	ShowInfo();
@@ -178,21 +178,17 @@ void DrawSnakeHead()
 	switch (g_Dir)
 	{
 	case Direction::left:
-		srcRect.left = 193;
-		srcRect.bottom = 126;
+		srcRect = Rectf{ 194, 124, 63, 58 };
 		break;
 	case Direction::right:
-		srcRect.left = 255;
-		srcRect.bottom = 63;
+		srcRect = Rectf{ 255, 61, 62, 59 };
 		break;
 	case Direction::up:
-		srcRect.left = 193;
-		srcRect.bottom = 63;
+		srcRect = Rectf{ 195, 64, 58, 63 };
 		break;
 	case Direction::down:
 	case Direction::none:
-		srcRect.left = 255;
-		srcRect.bottom = 126;
+		srcRect = Rectf{ 258, 126, 58, 62 };
 		break;
 	default:
 		break;
@@ -212,33 +208,25 @@ void DrawSnakeBody()
 void DrawSnakeTail()
 {
 	int g_TailIdx{};
-	Rectf srcRect{ 0, 0, 53, 60 };
+	Rectf srcRect{ 0, 0, 52, 60 };
 
 	Point2D pos{ g_HeadIdx / g_NrCols, g_HeadIdx % g_NrCols };
 	switch (g_Dir)
 	{
 	case  Direction::up:
-		srcRect.left = 197;
-		srcRect.bottom = 186;
+		srcRect = Rectf{ 198, 187, 52, 59 };
 		--pos.row;
 		break;
 	case Direction::down:
-		srcRect.left = 262;
-		srcRect.bottom = 256;
+		srcRect = Rectf{ 262, 256, 52, 59 };
 		++pos.row;
 		break;
 	case Direction::left:
-		srcRect.left = 192;
-		srcRect.bottom = 250;
-		srcRect.width = 60;
-		srcRect.height = 52;
+		srcRect = Rectf{ 192, 250, 59, 52 };
 		++pos.col;
 		break;
 	case Direction::right:
-		srcRect.left = 262;
-		srcRect.bottom = 186;
-		srcRect.width = 60;
-		srcRect.height = 52;
+		srcRect = Rectf{ 261, 185, 59, 52 };
 		--pos.col;
 		break;
 	case Direction::none:
