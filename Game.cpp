@@ -27,7 +27,7 @@ void Draw()
 
 void Update(float elapsedSec)
 {
-	float speedFactor{ 9.f };
+	float speedFactor{ 4.f };
 	g_AccumulatedTime += elapsedSec;
 	if (1.0f / speedFactor < g_AccumulatedTime)
 	{
@@ -211,27 +211,43 @@ void DrawSnakeBody()
 
 void DrawSnakeTail()
 {
-	int g_TailIdx{ g_HeadIdx };
-	Rectf srcRect{ 0, 0, 60, 64 }, dstRect{ pCells[g_HeadIdx].left, pCells[g_HeadIdx].bottom, g_CellSize, g_CellSize };
+	int g_TailIdx{};
+	Rectf srcRect{ 0, 0, 53, 60 };
 
+	Point2D pos{ g_HeadIdx / g_NrCols, g_HeadIdx % g_NrCols };
 	switch (g_Dir)
 	{
+	case  Direction::up:
+		srcRect.left = 197;
+		srcRect.bottom = 186;
+		--pos.row;
+		break;
+	case Direction::down:
+		srcRect.left = 262;
+		srcRect.bottom = 256;
+		++pos.row;
+		break;
 	case Direction::left:
-		// column + 1
+		srcRect.left = 192;
+		srcRect.bottom = 250;
+		srcRect.width = 60;
+		srcRect.height = 52;
+		++pos.col;
 		break;
 	case Direction::right:
-		// column - 1
-		break;
-	case Direction::up:
-		// row - 1
+		srcRect.left = 262;
+		srcRect.bottom = 186;
+		srcRect.width = 60;
+		srcRect.height = 52;
+		--pos.col;
 		break;
 	case Direction::none:
-	case Direction::down:
-		// row + 1
-		break;
-	default:
-		break;
+		return;
 	}
+
+	g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
+	Rectf dstRect{ pCells[g_TailIdx].left, pCells[g_TailIdx].bottom, g_CellSize, g_CellSize };
+	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 }
 
 /* Function to draw the fruit */
