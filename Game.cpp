@@ -22,9 +22,7 @@ void Start()
 	if (!success) std::cout << "Failed loading g_Info2Texture";
 
 	success = { TextureFromString("score: ", "resources/DIN-light.otf", 20, Color4f{0,0,0,1}, g_ScoreTexture) };
-	if (!success) std::cout << "Failed loading g_Info2Texture";
-	success = TextureFromString(std::to_string(g_Score), "resources/DIN-light.otf", 20, Color4f{ 0,0,0,1 }, g_ScoreNrTexture);
-	if (!success) std::cout << "Failed loading g_Info2Texture";
+	if (!success) std::cout << "Failed loading g_ScoreTexture";
 }
 
 void Draw()
@@ -393,7 +391,10 @@ void ShowInfo()
 		DrawTexture(g_ScoreTexture, pos);
 
 		pos.x += g_CellSize * 2.5f;
-		DrawTexture(g_ScoreTexture, pos);
+		bool success{ TextureFromString(std::to_string(g_Score), "resources/DIN-light.otf", 20, Color4f{ 0,0,0,1 }, g_ScoreNrTexture) };
+		if (!success) std::cout << "Failed loading g_ScoreNrTexture";
+		DrawTexture(g_ScoreNrTexture, pos);
+		DeleteTexture(g_ScoreNrTexture);
 	}
 }
 
