@@ -39,7 +39,9 @@ void InitSnake();
 void InitFruit();
 
 void DrawGrid();
-void DrawSnake();
+void DrawSnakeHead();
+void DrawSnakeBody();
+void DrawSnakeTail();
 void DrawFruit();
 
 void MoveSnake(float elapsedSec);

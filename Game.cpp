@@ -20,7 +20,7 @@ void Draw()
 	ClearBackground();
 
 	DrawGrid();
-	DrawSnake();
+	DrawSnakeHead();
 	DrawFruit();
 	ShowInfo();
 }
@@ -171,7 +171,7 @@ void DrawGrid()
 }
 
 /* Function to draw the snake (current: 1 rect big) */
-void DrawSnake()
+void DrawSnakeHead()
 {
 	Rectf srcRect{ 0, 0, 60, 64 }, dstRect{ pCells[g_HeadIdx].left, pCells[g_HeadIdx].bottom, g_CellSize, g_CellSize };
 
@@ -190,9 +190,6 @@ void DrawSnake()
 		srcRect.bottom = 63;
 		break;
 	case Direction::down:
-		srcRect.left = 255;
-		srcRect.bottom = 126;
-		break;
 	case Direction::none:
 		srcRect.left = 255;
 		srcRect.bottom = 126;
@@ -202,6 +199,39 @@ void DrawSnake()
 	}
 
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
+
+	DrawSnakeBody();
+	DrawSnakeTail();
+}
+
+void DrawSnakeBody()
+{
+
+}
+
+void DrawSnakeTail()
+{
+	int g_TailIdx{ g_HeadIdx };
+	Rectf srcRect{ 0, 0, 60, 64 }, dstRect{ pCells[g_HeadIdx].left, pCells[g_HeadIdx].bottom, g_CellSize, g_CellSize };
+
+	switch (g_Dir)
+	{
+	case Direction::left:
+		// column + 1
+		break;
+	case Direction::right:
+		// column - 1
+		break;
+	case Direction::up:
+		// row - 1
+		break;
+	case Direction::none:
+	case Direction::down:
+		// row + 1
+		break;
+	default:
+		break;
+	}
 }
 
 /* Function to draw the fruit */
