@@ -173,8 +173,38 @@ void DrawGrid()
 /* Function to draw the snake (current: 1 rect big) */
 void DrawSnake()
 {
-	SetColor(1, 0, 0, 1);
-	FillRect(pCells[g_TailIdx]);
+	//SetColor(1, 0, 0, 1);
+	//FillRect(pCells[g_TailIdx]);
+
+	Rectf srcRect{ 3, 255, 60, 64 }, dstRect{ pCells[g_TailIdx].left, pCells[g_TailIdx].bottom, g_CellSize, g_CellSize };
+
+	switch (g_Dir)
+	{
+	case Direction::left:
+		srcRect.left = 193;
+		srcRect.bottom = 126;
+		break;
+	case Direction::right:
+		srcRect.left = 255;
+		srcRect.bottom = 63;
+		break;
+	case Direction::up:
+		srcRect.left = 193;
+		srcRect.bottom = 63;
+		break;
+	case Direction::down:
+		srcRect.left = 255;
+		srcRect.bottom = 126;
+		break;
+	case Direction::none:
+		srcRect.left = 255;
+		srcRect.bottom = 126;
+		break;
+	default:
+		break;
+	}
+
+	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 }
 
 /* Function to draw the fruit */
@@ -197,7 +227,6 @@ bool DidSnakeGetFruit()
 	{
 		g_UpdateFruit = true;
 		++g_Score;
-		// g_Score += GetRand(250, 500);
 		return true;
 	}
 	return false;
