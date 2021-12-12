@@ -2,7 +2,6 @@
 #include "Game.h"
 #include <iostream>
 
-//Basic game functions
 #pragma region gameFunctions											
 void Start()
 {
@@ -12,15 +11,15 @@ void Start()
 	InitFruit();
 
 	g_UpdateFruit = true;
+	g_GameOver = false;
 	g_Dir = Direction::right;
 }
 
 void Draw()
 {
-	ClearBackground();
-	DrawGrid();
+	ClearBackground(.9f, .8f, .6f);
+	// DrawGrid();
 	DrawSnake();
-	DrawSnakeHead();
 	DrawFruit();
 	ShowInfo();
 }
@@ -50,6 +49,8 @@ void End()
 	DeleteTexture(g_ScoreNrTexture);
 }
 #pragma endregion gameFunctions
+
+
 
 //Keyboard and mouse input handling
 #pragma region inputHandling											
@@ -98,6 +99,8 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 }
 #pragma endregion inputHandling
 
+
+
 #pragma region initFunctions
 void InitTextures()
 {
@@ -140,17 +143,25 @@ void InitFruit()
 /* Function to set the snake in middle of the grid when program is opened */
 void InitSnake()
 {
-	const int initialSize{ 1 };
+	const int initialSize{ 2 };
 	g_Snake = new int[g_GridSize];
 	Point2D center{ g_NrRows / 2, g_NrCols / 2 };
-	g_Snake[0] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
+
+	//g_Snake[0] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
+	for (int i{ 0 }; i < initialSize; ++i)
+	{
+		g_Snake[i] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
+		center.col--;
+	}
+
 	g_SnakeLength = initialSize;
 }
 
 #pragma endregion initFunctions
 
-#pragma region DrawFunctions
 
+
+#pragma region DrawFunctions
 /* Function to draw the grid based on rects in array */
 void DrawGrid()
 {
@@ -161,6 +172,7 @@ void DrawGrid()
 	}
 }
 
+/* Functions to draw the snake: head, body and tail */
 void DrawSnake()
 {
 	for (int i = 0; i < g_SnakeLength; i++)
@@ -169,36 +181,15 @@ void DrawSnake()
 		SetColor(0.0f, 0.7f, 0.0f);
 		FillRect(pCells[g_Snake[i]]);
 	}
+
+	DrawSnakeHead();
 }
 
-/* Function to draw the snake (current: 1 rect big) */
 void DrawSnakeHead()
 {
-	Rectf srcRect{ GetSrcRect(SnakePart::head, g_Dir) }, dstRect{ pCells[g_Snake[0]].left, pCells[g_Snake[0]].bottom, g_CellSize, g_CellSize };
-
-	/*switch (g_Dir)
-	{
-	case Direction::left:
-		srcRect = Rectf{ 194, 124, 63, 58 };
-		break;
-	case Direction::right:
-		srcRect = Rectf{ 255, 61, 62, 59 };
-		break;
-	case Direction::up:
-		srcRect = Rectf{ 195, 64, 58, 63 };
-		break;
-	case Direction::down:
-	case Direction::none:
-		srcRect = Rectf{ 258, 126, 58, 62 };
-		break;
-	default:
-		break;
-	}*/
-
+	Rectf srcRect{ GetSrcRect(SnakePart::head, g_Dir) }, 
+		dstRect{ pCells[g_Snake[0]].left, pCells[g_Snake[0]].bottom, g_CellSize, g_CellSize };
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
-
-	//DrawSnakeBody();
-	//DrawSnakeTail();
 }
 
 void DrawSnakeBody()
@@ -231,18 +222,17 @@ void DrawFruit()
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 }
 
-
 void DrawGameOver()
 {
-
+	std::cout << "rip\n";
+	g_GameOver = true;
 }
 
 /* Function to move the snake */
 void MoveSnake(float elapsedSec)
 {
-	if (g_SnakeMoving)
+	if (g_SnakeMoving && !g_GameOver)
 	{
-		//Point2D pos{ g_Snake[0] / g_NrCols, g_Snake[0] % g_NrCols };
 		Point2D pos{ Get2DIndexFromLinearIndex(g_Snake[0], g_NrCols) };
 		switch (g_Dir)
 		{
@@ -261,6 +251,7 @@ void MoveSnake(float elapsedSec)
 		case Direction::none:
 			return;
 		}
+
 		//no borders (stops wall warp)
 		if (pos.row < 0)
 			pos.row = g_NrRows - 1;
@@ -270,20 +261,22 @@ void MoveSnake(float elapsedSec)
 			pos.col = g_NrCols - 1;
 		else if (g_NrCols - 1 < pos.col)
 			pos.col = 0;
+
 		for (int i{ g_SnakeLength - 1 }; 0 < i; --i)
 		{
 			g_Snake[i] = g_Snake[i - 1];
 		}
 		g_Snake[0] = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
+
 		DidSnakeGetFruit();
+		if (SelfCollision()) DrawGameOver();
 	}
 }
-
-
 #pragma endregion DrawFunctions
 
-#pragma region InfoFunctions
 
+
+#pragma region InfoFunctions
 /* Function to show info about the game, e.g. keybindings */
 void ShowInfo()
 {
@@ -391,13 +384,14 @@ bool DidSnakeGetFruit()
 	{
 		g_UpdateFruit = true;
 		++g_Score;
-		g_Snake[g_SnakeLength] = g_Snake[0];
+		g_Snake[g_SnakeLength] = g_Snake[1];
 		++g_SnakeLength;
 		return true;
 	}
 	return false;
 }
 
+/* Function to return the source rect of snake-graphics.png correspondent to the part that needs to be drawn */
 Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
 {
 	Rectf src{};
@@ -500,8 +494,31 @@ Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
 	return src;
 }
 
+/* Function to detect if the snake head collides with any part of its body */
 bool SelfCollision() {
+	for (int i{ 1 }; i < g_SnakeLength; i++)
+	{
+		if (g_Snake[0] == g_Snake[i]) return true;
+	}
 	return false;
 }
 
+/* Function to return which part of the snake body is equal to idx */
+SnakePart GetSnakePart(int idx)
+{
+	if (idx == 0)
+	{
+		return SnakePart::head;
+	}
+	else if (idx == g_SnakeLength)
+	{
+		return SnakePart::tail;
+	}
+	else
+	{
+		// if -1 and +1 are on the same row/column -> body
+		return SnakePart::body;
+		// else -> corner
+	}
+}
 #pragma endregion InfoFunctions
