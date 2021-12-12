@@ -48,6 +48,10 @@ void End()
 	DeleteTexture(g_ScoreTexture);
 	DeleteTexture(g_ScoreNrTexture);
 	DeleteTexture(g_DifficultyTexture);
+	DeleteTexture(g_GameOverTexture);
+	DeleteTexture(g_GameOver2Texture);
+	DeleteTexture(g_EndScoreTexture);
+	DeleteTexture(g_EndScoreNrTexture);
 }
 #pragma endregion gameFunctions
 
@@ -122,14 +126,22 @@ void InitTextures()
 	success = { TextureFromFile("Resources/info.png", g_InfoBoxTexture) };
 	if (!success) std::cout << "Failed loading g_InfoBoxTexture";
 
-	success = { TextureFromString("Controls", "Resources/DIN-light.otf", 50, g_White, g_InfoTexture) };
+	success = { TextureFromString("Controls", "Resources/Retro-Gaming.otf", 50, g_White, g_InfoTexture) };
 	if (!success) std::cout << "Failed loading g_InfoTexture";
-	success = { TextureFromString("Credits", "Resources/DIN-light.otf", 50, g_White, g_Info2Texture) };
+	success = { TextureFromString("Credits", "Resources/Retro-Gaming.otf", 50, g_White, g_Info2Texture) };
 	if (!success) std::cout << "Failed loading g_Info2Texture";
-	success = { TextureFromString("Score: ", "Resources/DIN-light.otf", 20, g_Black, g_ScoreTexture) };
+	success = { TextureFromString("Score: ", "Resources/Retro-Gaming.otf", 20, g_Black, g_ScoreTexture) };
 	if (!success) std::cout << "Failed loading g_ScoreTexture";
-	success = { TextureFromString("Difficulty: ", "Resources/DIN-light.otf", 50, g_White, g_DifficultyTexture) };
+	success = { TextureFromString("Difficulty: ", "Resources/Retro-Gaming.otf", 50, g_White, g_DifficultyTexture) };
 	if (!success) std::cout << "Failed loading g_DifficultyTexture ";
+	success = { TextureFromString("GAME OVER", "Resources/Retro-Gaming.otf", 75, g_Red, g_GameOverTexture) };
+	if (!success) std::cout << "Failed loading g_GameOverTexture ";
+	success = { TextureFromString("you died, rip", "Resources/Retro-Gaming.otf", 25, g_Red, g_GameOver2Texture) };
+	if (!success) std::cout << "Failed loading g_GameOver2Texture ";
+	success = { TextureFromString("score: ", "Resources/Retro-Gaming.otf", 25, g_White, g_EndScoreTexture) };
+	if (!success) std::cout << "Failed loading g_EndScoreTexture ";
+	success = { TextureFromString(std::to_string(g_Score), "Resources/Retro-Gaming.otf", 25, g_White, g_EndScoreNrTexture) };
+	if (!success) std::cout << "Failed loading g_EndScoreNrTexture ";
 }
 
 /* Function to add all the cells to the array pCells */
@@ -322,7 +334,7 @@ void DrawDifficulty()
 	{
 		SetColor(0, 0, 0, .7f);
 		FillRect(g_WindowWidth / 4, g_WindowHeight / 3, g_WindowWidth / 2, g_WindowHeight / 3);
-		const Point2f difficultyPos{ g_WindowWidth / 2 - 90, g_WindowHeight * 2 / 3 - g_CellSize*3};
+		const Point2f difficultyPos{ g_WindowWidth / 3 - 50, g_WindowHeight * 2 / 3 - g_CellSize*3};
 		DrawTexture(g_DifficultyTexture, difficultyPos);
 
 		const int fontSize{ 25 }, nrLines{ 3 };
@@ -336,7 +348,7 @@ void DrawDifficulty()
 
 		for (int i = 0; i < nrLines; ++i)
 		{
-			bool successful{ TextureFromString(pDifficulty[i], "Resources/DIN-Light.otf", fontSize, g_White, difficultyTexture) };
+			bool successful{ TextureFromString(pDifficulty[i], "Resources/Retro-Gaming.otf", fontSize, g_White, difficultyTexture) };
 
 			DrawTexture(difficultyTexture, Point2f{ g_WindowWidth / 4 + 5.f, difficultyPos.y - (difficultyTexture.height * (i + 1)) });
 			DeleteTexture(difficultyTexture);
@@ -347,8 +359,24 @@ void DrawDifficulty()
 
 void DrawGameOver()
 {
-	std::cout << "rip\n";
 	g_GameOver = true;
+	if (g_GameOver)
+	{
+	SetColor(g_Black);
+	FillRect(0.0f, 0.0f, g_WindowWidth, g_WindowHeight);
+	Point2f gameoverPos{ g_WindowWidth / 7, g_WindowHeight * 2/ 3 };
+
+	DrawTexture(g_GameOverTexture, gameoverPos);
+
+	Point2f gameover2Pos{ g_WindowWidth / 3 + 25, g_WindowHeight * 2 / 3 - 25 };
+	DrawTexture(g_GameOver2Texture, gameover2Pos);
+
+	Point2f scorePos{ g_WindowWidth / 2 - 75, g_WindowHeight/ 3 };
+	DrawTexture(g_EndScoreTexture, scorePos);
+
+	scorePos.x += 125;
+	DrawTexture(g_EndScoreNrTexture, scorePos);
+	}
 }
 
 /* Function to move the snake */
@@ -419,13 +447,13 @@ void ShowInfo()
 
 		// score
 		SetColor(0, 0, 1, .5f);
-		FillRect(g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 6 * g_CellSize, 4 * g_CellSize, 2 * g_CellSize);
+		FillRect(g_WindowWidth - 6 * g_CellSize, g_WindowHeight - 6 * g_CellSize, 5 * g_CellSize, 2 * g_CellSize);
 
-		pos = Point2f{ g_WindowWidth - 5 * g_CellSize, g_WindowHeight - 5 * g_CellSize - 10 };
+		pos = Point2f{ g_WindowWidth - 6 * g_CellSize, g_WindowHeight - 5 * g_CellSize - 10 };
 		DrawTexture(g_ScoreTexture, pos);
 
-		pos.x += g_CellSize * 2.5f;
-		bool success{ TextureFromString(std::to_string(g_Score), "resources/DIN-light.otf", 20, g_Black, g_ScoreNrTexture) };
+		pos.x += g_CellSize * 3.5f;
+		bool success{ TextureFromString(std::to_string(g_Score), "resources/Retro-Gaming.otf", 20, g_Black, g_ScoreNrTexture) };
 		if (!success) std::cout << "Failed loading g_ScoreNrTexture";
 		DrawTexture(g_ScoreNrTexture, pos);
 		DeleteTexture(g_ScoreNrTexture);
@@ -450,7 +478,7 @@ void DrawInfo()
 	FillRect(g_CellSize, g_CellSize, (g_WindowWidth - 2 * g_CellSize), (g_WindowHeight - 2 * g_CellSize));
 
 	// Info text
-	const Point2f infoPos{ g_WindowWidth / 2 - 40, g_WindowHeight - 4 * g_CellSize }, creditPos{ g_WindowWidth / 2 - 70, g_WindowHeight / 2 };
+	const Point2f infoPos{ g_WindowWidth / 3, g_WindowHeight - 4 * g_CellSize }, creditPos{ g_WindowWidth/3, g_WindowHeight / 2 };
 	const int fontSize{ 25 }, nrLines{ 7 };
 	Texture textTexture{};
 	Point2f posText{};
@@ -469,11 +497,11 @@ void DrawInfo()
 	DrawTexture(g_InfoTexture, infoPos);
 	for (int i{ 0 }; i < nrLines; ++i)
 	{
-		bool successful{ TextureFromString(pGameInfo[i], "Resources/DIN-Light.otf", fontSize, g_White, textTexture) };
+		bool successful{ TextureFromString(pGameInfo[i], "Resources/Retro-Gaming.otf", fontSize, g_White, textTexture) };
 
 		if (i < 4)
 		{
-			posText = Point2f{ g_WindowWidth / 4, infoPos.y - (textTexture.height * (i + 1)) };
+			posText = Point2f{ g_CellSize*3, infoPos.y - (textTexture.height * (i + 1)) };
 		}
 		else if (i == 4)
 		{
@@ -481,7 +509,7 @@ void DrawInfo()
 		}
 		else if (i > 4)
 		{
-			posText = Point2f{ g_WindowWidth / 4, infoPos.y - (textTexture.height * (i + 4)) };
+			posText = Point2f{ g_CellSize * 3, infoPos.y - (textTexture.height * (i + 4)) };
 		}
 
 		if (successful) DrawTexture(textTexture, posText);
