@@ -148,8 +148,10 @@ void InitSnake()
 	Point2D center{ g_NrRows / 2, g_NrCols / 2 };
 
 	//g_Snake[0] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
+
 	for (int i{ 0 }; i < initialSize; ++i)
 	{
+		if (i >= g_GridSize) break;
 		g_Snake[i] = GetLinearIndexFrom2DIndex(center.row, center.col, g_NrCols);
 		center.col--;
 	}
@@ -179,10 +181,11 @@ void DrawSnake()
 	{
 		//Point2D pos{ Get2DIndexFromLinearIndex(g_Snake[i], g_NrCols) };
 		SetColor(0.0f, 0.7f, 0.0f);
-		FillRect(pCells[g_Snake[i]]);
+		//FillRect(pCells[g_Snake[i]]);
 	}
 
 	DrawSnakeHead();
+	DrawSnakeBody();
 	DrawSnakeTail();
 }
 
@@ -195,7 +198,63 @@ void DrawSnakeHead()
 
 void DrawSnakeBody()
 {
+	Rectf src{};
 
+	for (int i{ 1 }; i < g_SnakeLength - 1; i++)
+	{
+		SnakePart bodypart = GetSnakePart(g_Snake[i]);
+
+		int current{ g_Snake[i] }, before{ g_Snake[i - 1] }, after{ g_Snake[i + 1] };
+		Direction dir{}, dir2{};
+
+		Point2D posCurrent{ Get2DIndexFromLinearIndex(current, g_NrCols) },
+			posBefore{ Get2DIndexFromLinearIndex(before, g_NrCols) },
+			posAfter{ Get2DIndexFromLinearIndex(after, g_NrCols) };
+
+		if (bodypart == SnakePart::body)
+		{
+			if ( (posBefore.row < posCurrent.row && posCurrent.row < posAfter.row) || (posBefore.row > posCurrent.row && posCurrent.row > posAfter.row) )
+			{
+				dir = Direction::down;
+			}
+			//else if ( (posBefore.col < posCurrent.col && posAfter.col < posAfter.col) || (posBefore.col > posCurrent.col && posCurrent.col > posAfter.col))
+			else
+			{
+				dir = Direction::left;
+			}
+
+			src = GetSrcRect(bodypart, dir);
+		}
+		else if (bodypart == SnakePart::corner)
+		{
+			if (posBefore.row < posCurrent.row && posCurrent.col < posAfter.col)
+			{
+				dir = Direction::down;
+				dir2 = Direction::right;
+			}
+			else if (posBefore.row < posCurrent.row && posCurrent.col > posAfter.col)
+			{
+				dir = Direction::down;
+				dir2 = Direction::left;
+			}
+			else if (posBefore.row > posCurrent.row && posCurrent.col < posAfter.col)
+			{
+				dir = Direction::up;
+				dir2 = Direction::right;
+			}
+			//else if (posBefore.row > posCurrent.row && posCurrent.col > posAfter.col)
+			else
+			{
+				dir = Direction::up;
+				dir2 = Direction::left;
+			}
+
+			src = GetSrcRect(bodypart, dir, dir2);
+		}
+
+		Rectf dstRect{ pCells[g_Snake[i]].left, pCells[g_Snake[i]].bottom, g_CellSize, g_CellSize };
+		DrawTexture(g_SnakeGraphics, dstRect, src);
+	}
 }
 
 void DrawSnakeTail()
@@ -414,26 +473,33 @@ bool DidSnakeGetFruit()
 /* Function to return the source rect of snake-graphics.png correspondent to the part that needs to be drawn */
 Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
 {
-	Rectf src{};
+	float size{64};
+	int col{ 5 }, row{ 4 };
+	Rectf src{ size, size, size, size };
+
 	switch (snk)
 	{
 	case SnakePart::head:
 		switch (dir1)
 		{
 		case Direction::left:
-			src = Rectf{ 194, 124, 63, 58 };
+			src.bottom *= 2;
+			src.left *= 3;
 			break;
 
 		case Direction::right:
-			src = Rectf{ 255, 61, 62, 59 };
+			src.bottom *= 1;
+			src.left *= 4;
 			break;
 
 		case Direction::up:
-			src = Rectf{ 195, 64, 58, 63 };
+			src.bottom *= 1;
+			src.left *= 3;
 			break;
 
 		case Direction::down:
-			src = Rectf{ 258, 126, 58, 62 };
+			src.bottom *= 2;
+			src.left *= 4;
 			break;
 
 		default:
@@ -444,13 +510,15 @@ Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
 	case SnakePart::body:
 		switch (dir1)
 		{
-		case Direction::left:
+		/*case Direction::left:
 		case Direction::right:
-			src = Rectf{};
-			break;
+			src.bottom *= 1;
+			src.left *= 1;
+			break;*/
 		case Direction::up:
 		case Direction::down:
-			src = Rectf{};
+			src.bottom *= 2;
+			src.left *= 2;
 			break;
 		default:
 			break;
@@ -461,19 +529,23 @@ Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
 		switch (dir1)
 		{
 		case Direction::left:
-			src = Rectf{ 192, 250, 59, 52 };
+			src.bottom *= 4;
+			src.left *= 3;
 			break;
 
 		case Direction::right:
-			src = Rectf{ 261, 185, 59, 52 };
+			src.bottom *= 3;
+			src.left *= 4;
 			break;
 
 		case Direction::up:
-			src = Rectf{ 198, 187, 52, 59 };
+			src.bottom *= 3;
+			src.left *= 3;
 			break;
 
 		case Direction::down:
-			src = Rectf{ 262, 256, 52, 59 };
+			src.bottom *= 4;
+			src.left *= 4;
 			break;
 
 		default:
@@ -486,11 +558,13 @@ Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
 		{
 			if (dir1 == Direction::left || dir2 == Direction::left)
 			{
-				src = Rectf{};
+				src.bottom *= 1;
+				src.left *= 2;
 			}
 			else if (dir1 == Direction::right || dir2 == Direction::right)
 			{
-				src = Rectf{};
+				src.bottom *= 1;
+				src.left *= 0;
 			}
 
 		}
@@ -498,11 +572,13 @@ Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
 		{
 			if (dir1 == Direction::left || dir2 == Direction::left)
 			{
-				src = Rectf{};
+				src.bottom *= 3;
+				src.left *= 2;
 			}
 			else if (dir1 == Direction::right || dir2 == Direction::right)
 			{
-				src = Rectf{};
+				src.bottom *= 2;
+				src.left *= 0;
 			}
 		}
 		break;
@@ -536,11 +612,11 @@ SnakePart GetSnakePart(int idx)
 	}
 	else
 	{
-		Point2D pos0{ Get2DIndexFromLinearIndex(g_Snake[idx], g_NrCols) };
-		Point2D pos1{ Get2DIndexFromLinearIndex(g_Snake[idx-1], g_NrCols) };
-		Point2D pos2{ Get2DIndexFromLinearIndex(g_Snake[idx=1], g_NrCols) };
+		Point2D pos0{ Get2DIndexFromLinearIndex(idx, g_NrCols) };
+		Point2D pos1{ Get2DIndexFromLinearIndex(idx-1, g_NrCols) };
+		Point2D pos2{ Get2DIndexFromLinearIndex(idx+1, g_NrCols) };
 
-		if (pos0.col == pos1.col == pos2.col || pos0.row == pos1.row == pos2.row)
+		if ( (pos0.col == pos1.col && pos1.col == pos2.col) || (pos0.row == pos1.row && pos1.row == pos2.row))
 		{
 			return SnakePart::body;
 		}
