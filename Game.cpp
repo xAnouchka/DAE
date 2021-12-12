@@ -200,13 +200,32 @@ void DrawSnakeBody()
 
 void DrawSnakeTail()
 {
+	// direction == where the previous bodyblock is
+
 	int tailIdx{ g_Snake[g_SnakeLength-1] };
-	Rectf srcRect{ GetSrcRect(SnakePart::tail, g_Dir) };
+	Direction dir{};
 
-	/*Point2D pos{ g_Snake[g_SnakeLength] / g_NrCols, g_Snake[g_SnakeLength] % g_NrCols };
-	g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);*/
+	Point2D posTail{ tailIdx / g_NrCols, tailIdx % g_NrCols }
+		, posBefore{ Get2DIndexFromLinearIndex(g_Snake[g_SnakeLength -2], g_NrCols) };
 
+	if (posBefore.row < posTail.row) {
+		dir = Direction::down;
+	}
+	else if (posBefore.row > posTail.row) {
+		dir = Direction::up;
+	}
+	else if (posBefore.col < posTail.col)
+	{
+		dir = Direction::left;
+	}
+	else if (posBefore.col > posTail.col) 
+	{
+		dir = Direction::right;
+	}
+
+	Rectf srcRect{ GetSrcRect(SnakePart::tail, dir) };
 	Rectf dstRect{ pCells[tailIdx].left, pCells[tailIdx].bottom, g_CellSize, g_CellSize };
+
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 }
 
