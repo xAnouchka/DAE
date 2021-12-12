@@ -98,10 +98,7 @@ void OnMouseUpEvent(const SDL_MouseButtonEvent& e)
 }
 #pragma endregion inputHandling
 
-#pragma region ownDefinitions
-
-#pragma region initialisingFunctions
-
+#pragma region initFunctions
 void InitTextures()
 {
 	bool success{ TextureFromFile("Resources/snake-graphics.png", g_SnakeGraphics) };
@@ -150,7 +147,7 @@ void InitSnake()
 	g_SnakeLength = initialSize;
 }
 
-#pragma endregion initialisingFunctions
+#pragma endregion initFunctions
 
 #pragma region DrawFunctions
 
@@ -255,22 +252,6 @@ void DrawFruit()
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 }
 
-#pragma endregion DrawFunctions
-
-/* Function to check if the snake has the fruit or not, returns a bool */
-bool DidSnakeGetFruit()
-{
-	if (g_Snake[0] == g_FruitIdx)
-	{
-		g_UpdateFruit = true;
-		++g_Score;
-		g_Snake[g_SnakeLength] = g_Snake[0];
-		++g_SnakeLength;
-		return true;
-	}
-	return false;
-}
-
 /* Function to move the snake */
 void MoveSnake(float elapsedSec)
 {
@@ -304,7 +285,7 @@ void MoveSnake(float elapsedSec)
 			pos.col = g_NrCols - 1;
 		else if (g_NrCols - 1 < pos.col)
 			pos.col = 0;
-		for (int i{ g_SnakeLength - 1}; 0 < i; --i)
+		for (int i{ g_SnakeLength - 1 }; 0 < i; --i)
 		{
 			g_Snake[i] = g_Snake[i - 1];
 		}
@@ -312,6 +293,11 @@ void MoveSnake(float elapsedSec)
 		DidSnakeGetFruit();
 	}
 }
+
+
+#pragma endregion DrawFunctions
+
+#pragma region InfoFunctions
 
 /* Function to show info about the game, e.g. keybindings */
 void ShowInfo()
@@ -374,7 +360,7 @@ void DrawInfo()
 	  "A or Left key to move snake left",
 	  "S or Down key to move snake down",
 	  "D or Right key to move snake right",
-	  "",
+	  " ",
 	  "Anouchka Thijs, 1DAEGDE13",
 	  "Angelica Rings, 1DAEGDE12"
 	};
@@ -413,4 +399,16 @@ int GetCellIdx(const Point2f& point)
 	return 0;
 }
 
-#pragma endregion ownDefinitions
+/* Function to check if the snake has the fruit or not, returns a bool */
+bool DidSnakeGetFruit()
+{
+	if (g_Snake[0] == g_FruitIdx)
+	{
+		g_UpdateFruit = true;
+		++g_Score;
+		return true;
+	}
+	return false;
+}
+
+#pragma endregion InfoFunctions
