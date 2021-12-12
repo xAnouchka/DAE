@@ -12,7 +12,7 @@ float g_WindowHeight{ 700 };
 
 
 #pragma region ownDeclarations
-const Color4f g_White{ 1, 1, 1, 1 }, g_Black{ 0, 0, 0, 1 };
+const Color4f g_White{ 1, 1, 1, 1 }, g_Black{ 0, 0, 0, 1 }, g_Red{ 1,0,0,1 };
 const float g_CellSize{ 25 };
 const int g_NrCols{ int(g_WindowWidth / g_CellSize) }, g_NrRows{ int(g_WindowHeight / g_CellSize) };
 const int g_GridSize{ g_NrCols * g_NrRows };
@@ -30,7 +30,8 @@ Direction g_Dir{};
 
 /* Graphics of the snake */
 const Point2f g_InfoPos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize };
-Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{}, g_DifficultyTexture{};
+Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{}; g_DifficultyTexture{}, g_GameOverTexture{},
+g_GameOver2Texture{}, Texture g_EndScoreTexture{}, Texture g_EndScoreNrTexture{};
 enum class SnakePart{ head, tail, body, corner};
 
 // Declare your own functions here
