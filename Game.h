@@ -23,7 +23,7 @@ int g_FruitIdx{}, g_NrFrames{}, g_Score{}, g_SnakeLength{};
 float g_AccumulatedTime{}, g_SpeedFactor{};
 int* g_Snake{};
 
-bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{}, g_GameOver{}, g_ShowDifficulty{};
+bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{}, g_GameOver{}, g_ShowDifficulty{}, g_StartScreen{};
 
 enum class Direction { left, right, up, down, none };
 Direction g_Dir{};
@@ -31,7 +31,8 @@ Direction g_Dir{};
 /* Graphics of the snake */
 const Point2f g_InfoPos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize };
 Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{}, 
-	g_DifficultyTexture{}, g_GameOverTexture{}, g_GameOver2Texture{}, g_EndScoreTexture{}, g_EndScoreNrTexture{};
+	g_DifficultyTexture{}, g_GameOverTexture{}, g_GameOver2Texture{}, g_EndScoreTexture{}, g_EndScoreNrTexture{},
+	g_TitleTexture{}, g_Title2Texture{}, g_StartTexture{}, g_StartCreditsTexture{}, g_CreditNamesTexture{};
 enum class SnakePart{ head, tail, body, corner};
 
 // Declare your own functions here
@@ -48,6 +49,7 @@ void DrawSnakeTail();
 void DrawFruit();
 void DrawDifficulty();
 void DrawGameOver();
+void DrawStartScreen();
 
 void MoveSnake(float elapsedSec);
 
