@@ -114,6 +114,109 @@ void InitTextures()
 	if (!success) std::cout << "Failed loading g_ScoreTexture";
 }
 
+
+Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
+{
+	Rectf src{};
+	switch (snk)
+	{
+	case SnakePart::head:
+		switch (dir1)
+		{
+		case Direction::left:
+			src = Rectf{ 194, 124, 63, 58 };
+			break;
+
+		case Direction::right:
+			src = Rectf{ 255, 61, 62, 59 };
+			break;
+
+		case Direction::up:
+			src = Rectf{ 195, 64, 58, 63 };
+			break;
+
+		case Direction::down:
+			src = Rectf{ 258, 126, 58, 62 };
+			break;
+
+		default:
+			break;
+		}
+		break;
+
+	case SnakePart::body:
+		switch (dir1)
+		{
+		case Direction::left:
+		case Direction::right:
+			src = Rectf{};
+			break;
+		case Direction::up:
+		case Direction::down:
+			src = Rectf{};
+			break;
+		default:
+			break;
+		}
+		break;
+
+	case SnakePart::tail:
+		switch (dir1)
+		{
+		case Direction::left:
+			src = Rectf{ 192, 250, 59, 52 };
+			break;
+
+		case Direction::right:
+			src = Rectf{ 261, 185, 59, 52 };
+			break;
+
+		case Direction::up:
+			src = Rectf{ 198, 187, 52, 59 };
+			break;
+
+		case Direction::down:
+			src = Rectf{ 262, 256, 52, 59 };
+			break;
+
+		default:
+			break;
+		}
+		break;
+
+	case SnakePart::corner:
+		if (dir1 == Direction::down || dir2 == Direction::down)
+		{
+			if (dir1 == Direction::left || dir2 == Direction::left)
+			{
+				src = Rectf{};
+			}
+			else if (dir1 == Direction::right || dir2 == Direction::right)
+			{
+				src = Rectf{};
+			}
+
+		}
+		else if (dir1 == Direction::up || dir2 == Direction::up)
+		{
+			if (dir1 == Direction::left || dir2 == Direction::left)
+			{
+				src = Rectf{};
+			}
+			else if (dir1 == Direction::right || dir2 == Direction::right)
+			{
+				src = Rectf{};
+			}
+		}
+		break;
+
+	default:
+		break;
+	}
+
+	return src;
+}
+
 /* Function to add all the cells to the array pCells */
 void InitGrid()
 {
@@ -174,9 +277,9 @@ void DrawSnake()
 /* Function to draw the snake (current: 1 rect big) */
 void DrawSnakeHead()
 {
-	Rectf srcRect{ 0, 0, 60, 64 }, dstRect{ pCells[g_Snake[0]].left, pCells[g_Snake[0]].bottom, g_CellSize, g_CellSize };
+	Rectf srcRect{ GetSrcRect(SnakePart::head, g_Dir) }, dstRect{ pCells[g_Snake[0]].left, pCells[g_Snake[0]].bottom, g_CellSize, g_CellSize };
 
-	switch (g_Dir)
+	/*switch (g_Dir)
 	{
 	case Direction::left:
 		srcRect = Rectf{ 194, 124, 63, 58 };
@@ -193,7 +296,7 @@ void DrawSnakeHead()
 		break;
 	default:
 		break;
-	}
+	}*/
 
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 
@@ -209,30 +312,9 @@ void DrawSnakeBody()
 void DrawSnakeTail()
 {
 	int g_TailIdx{};
-	Rectf srcRect{ 0, 0, 52, 60 };
+	Rectf srcRect{ GetSrcRect(SnakePart::tail, g_Dir) };
 
 	Point2D pos{ g_Snake[0] / g_NrCols, g_Snake[0] % g_NrCols };
-	switch (g_Dir)
-	{
-	case  Direction::up:
-		srcRect = Rectf{ 198, 187, 52, 59 };
-		--pos.row;
-		break;
-	case Direction::down:
-		srcRect = Rectf{ 262, 256, 52, 59 };
-		++pos.row;
-		break;
-	case Direction::left:
-		srcRect = Rectf{ 192, 250, 59, 52 };
-		++pos.col;
-		break;
-	case Direction::right:
-		srcRect = Rectf{ 261, 185, 59, 52 };
-		--pos.col;
-		break;
-	case Direction::none:
-		return;
-	}
 
 	g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
 	Rectf dstRect{ pCells[g_TailIdx].left, pCells[g_TailIdx].bottom, g_CellSize, g_CellSize };

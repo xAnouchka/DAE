@@ -12,7 +12,7 @@ float g_WindowHeight{ 700 };
 
 
 #pragma region ownDeclarations
-// Declare your own global variables here
+/* Functional elements of the snake */
 const float g_CellSize{ 25 };
 const int g_NrCols{ int(g_WindowWidth / g_CellSize) }, g_NrRows{ int(g_WindowHeight / g_CellSize) };
 const int g_GridSize{ g_NrCols * g_NrRows };
@@ -33,13 +33,16 @@ bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{};
 enum class Direction { left, right, up, down, none };
 Direction g_Dir{};
 
+/* Graphics of the snake */
 Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{};
+enum class SnakePart{ head, tail, body, corner};
 
 // Declare your own functions here
 void InitTextures();
 void InitGrid();
 void InitSnake();
 void InitFruit();
+Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2 = Direction::none);
 
 void DrawGrid();
 void DrawSnake();
