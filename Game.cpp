@@ -85,15 +85,15 @@ void OnKeyUpEvent(SDL_Keycode key)
 		g_Dir = Direction::down;
 		break;
 	case SDLK_1:
-		g_SpeedFactor = 4.f;
+		g_SpeedFactor = 5.f;
 		g_ShowDifficulty = false;
 		break;
 	case SDLK_2:
-		g_SpeedFactor = 7.f;
+		g_SpeedFactor = 9.f;
 		g_ShowDifficulty = false;
 		break;
 	case SDLK_3:
-		g_SpeedFactor = 13.f;
+		g_SpeedFactor = 16.f;
 		g_ShowDifficulty = false;
 		break;
 	}
