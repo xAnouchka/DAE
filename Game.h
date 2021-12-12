@@ -30,7 +30,7 @@ Direction g_Dir{};
 
 /* Graphics of the snake */
 const Point2f g_InfoPos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize };
-Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{};
+Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{}; g_DifficultyTexture{};
 enum class SnakePart{ head, tail, body, corner};
 
 // Declare your own functions here
