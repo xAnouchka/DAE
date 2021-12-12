@@ -30,8 +30,8 @@ Direction g_Dir{};
 
 /* Graphics of the snake */
 const Point2f g_InfoPos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize };
-Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{}; g_DifficultyTexture{}, g_GameOverTexture{},
-g_GameOver2Texture{}, Texture g_EndScoreTexture{}, Texture g_EndScoreNrTexture{};
+Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{}, 
+	g_DifficultyTexture{}, g_GameOverTexture{}, g_GameOver2Texture{}, g_EndScoreTexture{}, g_EndScoreNrTexture{};
 enum class SnakePart{ head, tail, body, corner};
 
 // Declare your own functions here
@@ -54,7 +54,6 @@ void MoveSnake(float elapsedSec);
 bool DidSnakeGetFruit();
 bool SelfCollision();
 int GetCellIdx(const Point2f& point);
-SnakePart GetSnakePart(int idx);
 Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2 = Direction::none);
 
 void ShowInfo();

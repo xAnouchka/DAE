@@ -100,7 +100,7 @@ void OnKeyUpEvent(SDL_Keycode key)
 		g_ShowDifficulty = false;
 		break;
 	case SDLK_3:
-		g_SpeedFactor = 16.f;
+		g_SpeedFactor = 13.f;
 		g_ShowDifficulty = false;
 		break;
 	}
@@ -231,8 +231,6 @@ void DrawSnakeBody()
 
 	for (int i{ 1 }; i < g_SnakeLength - 1; i++)
 	{
-		SnakePart bodypart = GetSnakePart(g_Snake[i]);
-
 		int current{ g_Snake[i] }, before{ g_Snake[i - 1] }, after{ g_Snake[i + 1] };
 		Direction dir{}, dir2{};
 
@@ -240,7 +238,13 @@ void DrawSnakeBody()
 			posBefore{ Get2DIndexFromLinearIndex(before, g_NrCols) },
 			posAfter{ Get2DIndexFromLinearIndex(after, g_NrCols) };
 
-		if (bodypart == SnakePart::body)
+		/*if ((posBefore.col == posCurrent.col && posCurrent.col == posAfter.col) || (posBefore.row == posCurrent.row && posCurrent.row == posAfter.row))
+		{
+			bodypart = SnakePart::body;
+		}
+		else bodypart =  SnakePart::corner;*/
+
+		if ((posBefore.col == posCurrent.col && posCurrent.col == posAfter.col) || (posBefore.row == posCurrent.row && posCurrent.row == posAfter.row))
 		{
 			if ( (posBefore.row < posCurrent.row && posCurrent.row < posAfter.row) || (posBefore.row > posCurrent.row && posCurrent.row > posAfter.row) )
 			{
@@ -252,9 +256,9 @@ void DrawSnakeBody()
 				dir = Direction::left;
 			}
 
-			src = GetSrcRect(bodypart, dir);
+			src = GetSrcRect(SnakePart::body, dir);
 		}
-		else if (bodypart == SnakePart::corner)
+		else
 		{
 			if (posBefore.row < posCurrent.row && posCurrent.col < posAfter.col)
 			{
@@ -278,7 +282,7 @@ void DrawSnakeBody()
 				dir2 = Direction::left;
 			}
 
-			src = GetSrcRect(bodypart, dir, dir2);
+			src = GetSrcRect(SnakePart::corner, dir, dir2);
 		}
 
 		Rectf dstRect{ pCells[g_Snake[i]].left, pCells[g_Snake[i]].bottom, g_CellSize, g_CellSize };
@@ -326,7 +330,7 @@ void DrawFruit()
 		g_UpdateFruit = false;
 	}
 
-	Rectf srcRect{ 3, 255, 57, 63 }, dstRect{ pCells[g_FruitIdx].left, pCells[g_FruitIdx].bottom, g_CellSize, g_CellSize };
+	Rectf srcRect{ 0, 256, 64, 64 }, dstRect{ pCells[g_FruitIdx].left, pCells[g_FruitIdx].bottom, g_CellSize, g_CellSize };
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 }
 
@@ -363,23 +367,23 @@ void DrawGameOver()
 {
 	if (g_GameOver)
 	{
-	SetColor(g_Black);
-	FillRect(0.0f, 0.0f, g_WindowWidth, g_WindowHeight);
-	Point2f gameoverPos{ g_WindowWidth / 7, g_WindowHeight * 2/ 3 };
+		SetColor(g_Black);
+		FillRect(0.0f, 0.0f, g_WindowWidth, g_WindowHeight);
+		Point2f gameoverPos{ g_WindowWidth / 7, g_WindowHeight * 2/ 3 };
 
-	DrawTexture(g_GameOverTexture, gameoverPos);
+		DrawTexture(g_GameOverTexture, gameoverPos);
 
-	Point2f gameover2Pos{ g_WindowWidth / 3 + 25, g_WindowHeight * 2 / 3 - 25 };
-	DrawTexture(g_GameOver2Texture, gameover2Pos);
+		Point2f gameover2Pos{ g_WindowWidth / 3 + 25, g_WindowHeight * 2 / 3 - 25 };
+		DrawTexture(g_GameOver2Texture, gameover2Pos);
 
-	Point2f scorePos{ g_WindowWidth / 2 - 75, g_WindowHeight/ 3 };
-	DrawTexture(g_EndScoreTexture, scorePos);
+		Point2f scorePos{ g_WindowWidth / 2 - 75, g_WindowHeight/ 3 };
+		DrawTexture(g_EndScoreTexture, scorePos);
 
-	scorePos.x += 125;
-	DrawTexture(g_EndScoreNrTexture, scorePos);
+		scorePos.x += 125;
+		DrawTexture(g_EndScoreNrTexture, scorePos);
 		
-	bool success{ TextureFromString(std::to_string(g_Score), "Resources/Retro-Gaming.otf", 25, g_White, g_EndScoreNrTexture) };
-	if (!success) std::cout << "Failed loading g_EndScoreNrTexture ";
+		bool success{ TextureFromString(std::to_string(g_Score), "Resources/Retro-Gaming.otf", 25, g_White, g_EndScoreNrTexture) };
+		if (!success) std::cout << "Failed loading g_EndScoreNrTexture ";
 	}
 }
 
@@ -675,30 +679,5 @@ bool SelfCollision() {
 		if (g_Snake[0] == g_Snake[i]) return true;
 	}
 	return false;
-}
-
-/* Function to return which part of the snake body is equal to idx */
-SnakePart GetSnakePart(int idx)
-{
-	if (idx == 0)
-	{
-		return SnakePart::head;
-	}
-	else if (idx == g_SnakeLength)
-	{
-		return SnakePart::tail;
-	}
-	else
-	{
-		Point2D pos0{ Get2DIndexFromLinearIndex(idx, g_NrCols) };
-		Point2D pos1{ Get2DIndexFromLinearIndex(idx-1, g_NrCols) };
-		Point2D pos2{ Get2DIndexFromLinearIndex(idx+1, g_NrCols) };
-
-		if ( (pos0.col == pos1.col && pos1.col == pos2.col) || (pos0.row == pos1.row && pos1.row == pos2.row))
-		{
-			return SnakePart::body;
-		}
-		else return SnakePart::corner;
-	}
 }
 #pragma endregion InfoFunctions
