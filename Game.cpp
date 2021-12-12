@@ -83,6 +83,18 @@ void OnKeyUpEvent(SDL_Keycode key)
 	case SDLK_DOWN:
 		g_Dir = Direction::down;
 		break;
+	case SDLK_1:
+		g_SpeedFactor = 4.f;
+		g_ShowDifficulty = false;
+		break;
+	case SDLK_2:
+		g_SpeedFactor = 7.f;
+		g_ShowDifficulty = false;
+		break;
+	case SDLK_3:
+		g_SpeedFactor = 13.f;
+		g_ShowDifficulty = false;
+		break;
 	}
 }
 
@@ -240,6 +252,18 @@ void DrawFruit()
 
 	Rectf srcRect{ 3, 255, 57, 63 }, dstRect{ pCells[g_FruitIdx].left, pCells[g_FruitIdx].bottom, g_CellSize, g_CellSize };
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
+}
+
+void DrawDifficulty()
+{
+	if (g_ShowDifficulty)
+	{
+		//box
+		SetColor(0, 0, 0, .7f);
+		FillRect(g_WindowWidth / 4, g_WindowHeight / 3, g_WindowWidth / 2, g_WindowHeight / 3);
+
+	}
+
 }
 
 void DrawGameOver()
