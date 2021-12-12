@@ -13,6 +13,7 @@ void Start()
 	g_UpdateFruit = true;
 	g_GameOver = false;
 	g_Dir = Direction::right;
+	g_ShowDifficulty = true;
 }
 
 void Draw()
@@ -22,6 +23,8 @@ void Draw()
 	DrawSnake();
 	DrawFruit();
 	ShowInfo();
+	DrawDifficulty();
+	DrawGameOver();
 }
 
 void Update(float elapsedSec)
@@ -140,8 +143,7 @@ void InitTextures()
 	if (!success) std::cout << "Failed loading g_GameOver2Texture ";
 	success = { TextureFromString("score: ", "Resources/Retro-Gaming.otf", 25, g_White, g_EndScoreTexture) };
 	if (!success) std::cout << "Failed loading g_EndScoreTexture ";
-	success = { TextureFromString(std::to_string(g_Score), "Resources/Retro-Gaming.otf", 25, g_White, g_EndScoreNrTexture) };
-	if (!success) std::cout << "Failed loading g_EndScoreNrTexture ";
+	
 }
 
 /* Function to add all the cells to the array pCells */
@@ -359,7 +361,6 @@ void DrawDifficulty()
 
 void DrawGameOver()
 {
-	g_GameOver = true;
 	if (g_GameOver)
 	{
 	SetColor(g_Black);
@@ -376,6 +377,9 @@ void DrawGameOver()
 
 	scorePos.x += 125;
 	DrawTexture(g_EndScoreNrTexture, scorePos);
+		
+	bool success{ TextureFromString(std::to_string(g_Score), "Resources/Retro-Gaming.otf", 25, g_White, g_EndScoreNrTexture) };
+	if (!success) std::cout << "Failed loading g_EndScoreNrTexture ";
 	}
 }
 
@@ -420,7 +424,9 @@ void MoveSnake(float elapsedSec)
 		g_Snake[0] = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
 
 		DidSnakeGetFruit();
-		if (SelfCollision()) DrawGameOver();
+		if (SelfCollision())
+			g_GameOver = true;
+			DrawGameOver();
 	}
 }
 #pragma endregion DrawFunctions
