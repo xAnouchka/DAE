@@ -49,11 +49,14 @@ void DrawSnakeHead();
 void DrawSnakeBody();
 void DrawSnakeTail();
 void DrawFruit();
+void DrawGameOver();
 
 void MoveSnake(float elapsedSec);
 
 bool DidSnakeGetFruit();
+bool SelfCollision();
 int GetCellIdx(const Point2f& point);
+SnakePart GetSnakePart(int idx);
 Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2 = Direction::none);
 
 void ShowInfo();

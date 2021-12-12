@@ -231,6 +231,12 @@ void DrawFruit()
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 }
 
+
+void DrawGameOver()
+{
+
+}
+
 /* Function to move the snake */
 void MoveSnake(float elapsedSec)
 {
@@ -492,6 +498,10 @@ Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
 	}
 
 	return src;
+}
+
+bool SelfCollision() {
+	return false;
 }
 
 #pragma endregion InfoFunctions
