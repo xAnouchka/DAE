@@ -20,17 +20,17 @@ const int g_GridSize{ g_NrCols * g_NrRows };
 /* Functional elements of the snake */
 Rectf* pCells{ new Rectf[g_GridSize] {} };
 int g_FruitIdx{}, g_NrFrames{}, g_Score{}, g_SnakeLength{};
-float g_AccumulatedTime{}; g_SpeedFactor{};
+float g_AccumulatedTime{}, g_SpeedFactor{};
 int* g_Snake{};
 
-bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{}, g_GameOver{}; g_ShowDifficulty{};
+bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{}, g_GameOver{}, g_ShowDifficulty{};
 
 enum class Direction { left, right, up, down, none };
 Direction g_Dir{};
 
 /* Graphics of the snake */
 const Point2f g_InfoPos{ g_WindowWidth / 2 - 40,g_WindowHeight - 4 * g_CellSize };
-Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{}; g_DifficultyTexture{};
+Texture g_SnakeGraphics{}, g_InfoTexture{}, g_Info2Texture{}, g_InfoBoxTexture{}, g_ScoreTexture{}, g_ScoreNrTexture{}, g_DifficultyTexture{};
 enum class SnakePart{ head, tail, body, corner};
 
 // Declare your own functions here
