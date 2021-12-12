@@ -26,11 +26,11 @@ void Draw()
 
 void Update(float elapsedSec)
 {
-	float speedFactor;
+	g_SpeedFactor;
 	g_AccumulatedTime += elapsedSec;
-	if (1.0f / speedFactor < g_AccumulatedTime)
+	if (1.0f / g_SpeedFactor < g_AccumulatedTime)
 	{
-		g_AccumulatedTime -= 1.0f / speedFactor;
+		g_AccumulatedTime -= 1.0f / g_SpeedFactor;
 		MoveSnake(elapsedSec);
 	}
 }
