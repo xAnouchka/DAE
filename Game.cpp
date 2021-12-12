@@ -183,6 +183,7 @@ void DrawSnake()
 	}
 
 	DrawSnakeHead();
+	DrawSnakeTail();
 }
 
 void DrawSnakeHead()
@@ -199,13 +200,13 @@ void DrawSnakeBody()
 
 void DrawSnakeTail()
 {
-	int g_TailIdx{};
+	int tailIdx{ g_Snake[g_SnakeLength-1] };
 	Rectf srcRect{ GetSrcRect(SnakePart::tail, g_Dir) };
 
-	Point2D pos{ g_Snake[0] / g_NrCols, g_Snake[0] % g_NrCols };
+	/*Point2D pos{ g_Snake[g_SnakeLength] / g_NrCols, g_Snake[g_SnakeLength] % g_NrCols };
+	g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);*/
 
-	g_TailIdx = GetLinearIndexFrom2DIndex(pos.row, pos.col, g_NrCols);
-	Rectf dstRect{ pCells[g_TailIdx].left, pCells[g_TailIdx].bottom, g_CellSize, g_CellSize };
+	Rectf dstRect{ pCells[tailIdx].left, pCells[tailIdx].bottom, g_CellSize, g_CellSize };
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
 }
 
@@ -516,9 +517,15 @@ SnakePart GetSnakePart(int idx)
 	}
 	else
 	{
-		// if -1 and +1 are on the same row/column -> body
-		return SnakePart::body;
-		// else -> corner
+		Point2D pos0{ Get2DIndexFromLinearIndex(g_Snake[idx], g_NrCols) };
+		Point2D pos1{ Get2DIndexFromLinearIndex(g_Snake[idx-1], g_NrCols) };
+		Point2D pos2{ Get2DIndexFromLinearIndex(g_Snake[idx=1], g_NrCols) };
+
+		if (pos0.col == pos1.col == pos2.col || pos0.row == pos1.row == pos2.row)
+		{
+			return SnakePart::body;
+		}
+		else return SnakePart::corner;
 	}
 }
 #pragma endregion InfoFunctions
