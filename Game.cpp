@@ -11,7 +11,6 @@ void Start()
 	InitSnake();
 	InitFruit();
 
-	g_ShowInfo = false;
 	g_UpdateFruit = true;
 	g_Dir = Direction::right;
 }
