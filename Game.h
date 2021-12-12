@@ -23,7 +23,7 @@ int g_FruitIdx{}, g_NrFrames{}, g_Score{}, g_SnakeLength{};
 float g_AccumulatedTime{};
 int* g_Snake{};
 
-bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{}, g_GameOver{};
+bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{}, g_GameOver{}; g_ShowDifficulty{};
 
 enum class Direction { left, right, up, down, none };
 Direction g_Dir{};
@@ -45,6 +45,7 @@ void DrawSnakeHead();
 void DrawSnakeBody();
 void DrawSnakeTail();
 void DrawFruit();
+void DrawDifficulty();
 void DrawGameOver();
 
 void MoveSnake(float elapsedSec);
