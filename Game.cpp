@@ -26,11 +26,11 @@ void Draw()
 
 void Update(float elapsedSec)
 {
-	float speedFactor{ 4.f };
+	g_SpeedFactor;
 	g_AccumulatedTime += elapsedSec;
-	if (1.0f / speedFactor < g_AccumulatedTime)
+	if (1.0f / g_SpeedFactor < g_AccumulatedTime)
 	{
-		g_AccumulatedTime -= 1.0f / speedFactor;
+		g_AccumulatedTime -= 1.0f / g_SpeedFactor;
 		MoveSnake(elapsedSec);
 	}
 }
@@ -47,6 +47,7 @@ void End()
 	DeleteTexture(g_InfoBoxTexture);
 	DeleteTexture(g_ScoreTexture);
 	DeleteTexture(g_ScoreNrTexture);
+	DeleteTexture(g_DifficultyTexture);
 }
 #pragma endregion gameFunctions
 
@@ -83,6 +84,18 @@ void OnKeyUpEvent(SDL_Keycode key)
 	case SDLK_DOWN:
 		g_Dir = Direction::down;
 		break;
+	case SDLK_1:
+		g_SpeedFactor = 5.f;
+		g_ShowDifficulty = false;
+		break;
+	case SDLK_2:
+		g_SpeedFactor = 9.f;
+		g_ShowDifficulty = false;
+		break;
+	case SDLK_3:
+		g_SpeedFactor = 16.f;
+		g_ShowDifficulty = false;
+		break;
 	}
 }
 
@@ -115,6 +128,8 @@ void InitTextures()
 	if (!success) std::cout << "Failed loading g_Info2Texture";
 	success = { TextureFromString("Score: ", "Resources/DIN-light.otf", 20, g_Black, g_ScoreTexture) };
 	if (!success) std::cout << "Failed loading g_ScoreTexture";
+	success = { TextureFromString("Difficulty: ", "Resources/DIN-light.otf", 50, g_White, g_DifficultyTexture) };
+	if (!success) std::cout << "Failed loading g_DifficultyTexture ";
 }
 
 /* Function to add all the cells to the array pCells */
@@ -299,6 +314,35 @@ void DrawFruit()
 
 	Rectf srcRect{ 3, 255, 57, 63 }, dstRect{ pCells[g_FruitIdx].left, pCells[g_FruitIdx].bottom, g_CellSize, g_CellSize };
 	DrawTexture(g_SnakeGraphics, dstRect, srcRect);
+}
+
+void DrawDifficulty()
+{
+	if (g_ShowDifficulty)
+	{
+		SetColor(0, 0, 0, .7f);
+		FillRect(g_WindowWidth / 4, g_WindowHeight / 3, g_WindowWidth / 2, g_WindowHeight / 3);
+		const Point2f difficultyPos{ g_WindowWidth / 2 - 90, g_WindowHeight * 2 / 3 - g_CellSize*3};
+		DrawTexture(g_DifficultyTexture, difficultyPos);
+
+		const int fontSize{ 25 }, nrLines{ 3 };
+		Texture difficultyTexture{};
+		std::string pDifficulty[nrLines]
+		{
+		"press 1 for easy",
+		"press 2 for medium",
+		"press 3 for hard",
+		};
+
+		for (int i = 0; i < nrLines; ++i)
+		{
+			bool successful{ TextureFromString(pDifficulty[i], "Resources/DIN-Light.otf", fontSize, g_White, difficultyTexture) };
+
+			DrawTexture(difficultyTexture, Point2f{ g_WindowWidth / 4 + 5.f, difficultyPos.y - (difficultyTexture.height * (i + 1)) });
+			DeleteTexture(difficultyTexture);
+		}
+	}
+
 }
 
 void DrawGameOver()
