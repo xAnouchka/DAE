@@ -20,7 +20,7 @@ const int g_GridSize{ g_NrCols * g_NrRows };
 /* Functional elements of the snake */
 Rectf* pCells{ new Rectf[g_GridSize] {} };
 int g_FruitIdx{}, g_NrFrames{}, g_Score{}, g_SnakeLength{};
-float g_AccumulatedTime{};
+float g_AccumulatedTime{}; g_SpeedFactor{};
 int* g_Snake{};
 
 bool g_UpdateFruit{}, g_ShowInfo{}, g_SnakeMoving{}, g_GameOver{}; g_ShowDifficulty{};
