@@ -42,7 +42,6 @@ void InitTextures();
 void InitGrid();
 void InitSnake();
 void InitFruit();
-Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2 = Direction::none);
 
 void DrawGrid();
 void DrawSnake();
@@ -55,6 +54,7 @@ void MoveSnake(float elapsedSec);
 
 bool DidSnakeGetFruit();
 int GetCellIdx(const Point2f& point);
+Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2 = Direction::none);
 
 void ShowInfo();
 void PrintInfo();

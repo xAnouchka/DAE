@@ -114,109 +114,6 @@ void InitTextures()
 	if (!success) std::cout << "Failed loading g_ScoreTexture";
 }
 
-
-Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
-{
-	Rectf src{};
-	switch (snk)
-	{
-	case SnakePart::head:
-		switch (dir1)
-		{
-		case Direction::left:
-			src = Rectf{ 194, 124, 63, 58 };
-			break;
-
-		case Direction::right:
-			src = Rectf{ 255, 61, 62, 59 };
-			break;
-
-		case Direction::up:
-			src = Rectf{ 195, 64, 58, 63 };
-			break;
-
-		case Direction::down:
-			src = Rectf{ 258, 126, 58, 62 };
-			break;
-
-		default:
-			break;
-		}
-		break;
-
-	case SnakePart::body:
-		switch (dir1)
-		{
-		case Direction::left:
-		case Direction::right:
-			src = Rectf{};
-			break;
-		case Direction::up:
-		case Direction::down:
-			src = Rectf{};
-			break;
-		default:
-			break;
-		}
-		break;
-
-	case SnakePart::tail:
-		switch (dir1)
-		{
-		case Direction::left:
-			src = Rectf{ 192, 250, 59, 52 };
-			break;
-
-		case Direction::right:
-			src = Rectf{ 261, 185, 59, 52 };
-			break;
-
-		case Direction::up:
-			src = Rectf{ 198, 187, 52, 59 };
-			break;
-
-		case Direction::down:
-			src = Rectf{ 262, 256, 52, 59 };
-			break;
-
-		default:
-			break;
-		}
-		break;
-
-	case SnakePart::corner:
-		if (dir1 == Direction::down || dir2 == Direction::down)
-		{
-			if (dir1 == Direction::left || dir2 == Direction::left)
-			{
-				src = Rectf{};
-			}
-			else if (dir1 == Direction::right || dir2 == Direction::right)
-			{
-				src = Rectf{};
-			}
-
-		}
-		else if (dir1 == Direction::up || dir2 == Direction::up)
-		{
-			if (dir1 == Direction::left || dir2 == Direction::left)
-			{
-				src = Rectf{};
-			}
-			else if (dir1 == Direction::right || dir2 == Direction::right)
-			{
-				src = Rectf{};
-			}
-		}
-		break;
-
-	default:
-		break;
-	}
-
-	return src;
-}
-
 /* Function to add all the cells to the array pCells */
 void InitGrid()
 {
@@ -493,6 +390,108 @@ bool DidSnakeGetFruit()
 		return true;
 	}
 	return false;
+}
+
+Rectf GetSrcRect(const SnakePart& snk, const Direction& dir1, Direction dir2)
+{
+	Rectf src{};
+	switch (snk)
+	{
+	case SnakePart::head:
+		switch (dir1)
+		{
+		case Direction::left:
+			src = Rectf{ 194, 124, 63, 58 };
+			break;
+
+		case Direction::right:
+			src = Rectf{ 255, 61, 62, 59 };
+			break;
+
+		case Direction::up:
+			src = Rectf{ 195, 64, 58, 63 };
+			break;
+
+		case Direction::down:
+			src = Rectf{ 258, 126, 58, 62 };
+			break;
+
+		default:
+			break;
+		}
+		break;
+
+	case SnakePart::body:
+		switch (dir1)
+		{
+		case Direction::left:
+		case Direction::right:
+			src = Rectf{};
+			break;
+		case Direction::up:
+		case Direction::down:
+			src = Rectf{};
+			break;
+		default:
+			break;
+		}
+		break;
+
+	case SnakePart::tail:
+		switch (dir1)
+		{
+		case Direction::left:
+			src = Rectf{ 192, 250, 59, 52 };
+			break;
+
+		case Direction::right:
+			src = Rectf{ 261, 185, 59, 52 };
+			break;
+
+		case Direction::up:
+			src = Rectf{ 198, 187, 52, 59 };
+			break;
+
+		case Direction::down:
+			src = Rectf{ 262, 256, 52, 59 };
+			break;
+
+		default:
+			break;
+		}
+		break;
+
+	case SnakePart::corner:
+		if (dir1 == Direction::down || dir2 == Direction::down)
+		{
+			if (dir1 == Direction::left || dir2 == Direction::left)
+			{
+				src = Rectf{};
+			}
+			else if (dir1 == Direction::right || dir2 == Direction::right)
+			{
+				src = Rectf{};
+			}
+
+		}
+		else if (dir1 == Direction::up || dir2 == Direction::up)
+		{
+			if (dir1 == Direction::left || dir2 == Direction::left)
+			{
+				src = Rectf{};
+			}
+			else if (dir1 == Direction::right || dir2 == Direction::right)
+			{
+				src = Rectf{};
+			}
+		}
+		break;
+
+	default:
+		break;
+	}
+
+	return src;
 }
 
 #pragma endregion InfoFunctions
