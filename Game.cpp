@@ -26,7 +26,7 @@ void Draw()
 
 void Update(float elapsedSec)
 {
-	float speedFactor{ 4.f };
+	float speedFactor;
 	g_AccumulatedTime += elapsedSec;
 	if (1.0f / speedFactor < g_AccumulatedTime)
 	{
