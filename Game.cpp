@@ -206,13 +206,6 @@ void DrawGrid()
 /* Functions to draw the snake: head, body and tail */
 void DrawSnake()
 {
-	for (int i = 0; i < g_SnakeLength; i++)
-	{
-		//Point2D pos{ Get2DIndexFromLinearIndex(g_Snake[i], g_NrCols) };
-		SetColor(0.0f, 0.7f, 0.0f);
-		//FillRect(pCells[g_Snake[i]]);
-	}
-
 	DrawSnakeHead();
 	DrawSnakeBody();
 	DrawSnakeTail();
@@ -238,44 +231,37 @@ void DrawSnakeBody()
 			posBefore{ Get2DIndexFromLinearIndex(before, g_NrCols) },
 			posAfter{ Get2DIndexFromLinearIndex(after, g_NrCols) };
 
-		/*if ((posBefore.col == posCurrent.col && posCurrent.col == posAfter.col) || (posBefore.row == posCurrent.row && posCurrent.row == posAfter.row))
-		{
-			bodypart = SnakePart::body;
-		}
-		else bodypart =  SnakePart::corner;*/
-
 		if ((posBefore.col == posCurrent.col && posCurrent.col == posAfter.col) || (posBefore.row == posCurrent.row && posCurrent.row == posAfter.row))
 		{
 			if ( (posBefore.row < posCurrent.row && posCurrent.row < posAfter.row) || (posBefore.row > posCurrent.row && posCurrent.row > posAfter.row) )
 			{
 				dir = Direction::down;
 			}
-			//else if ( (posBefore.col < posCurrent.col && posAfter.col < posAfter.col) || (posBefore.col > posCurrent.col && posCurrent.col > posAfter.col))
-			else
-			{
-				dir = Direction::left;
-			}
+			else dir = Direction::left;
 
 			src = GetSrcRect(SnakePart::body, dir);
 		}
 		else
 		{
-			if (posBefore.row < posCurrent.row && posCurrent.col < posAfter.col)
+			//if (posBefore.row < posCurrent.row && posCurrent.col < posAfter.col)
+			if ( (posCurrent.col < posBefore.col && posCurrent.row > posAfter.row) || (posCurrent.row > posBefore.row && posCurrent.col < posAfter.col) )
 			{
 				dir = Direction::down;
 				dir2 = Direction::right;
 			}
-			else if (posBefore.row < posCurrent.row && posCurrent.col > posAfter.col)
+			//else if ( (posBefore.row < posCurrent.row && posCurrent.col > posAfter.col))
+			else if ((posCurrent.col > posBefore.col && posCurrent.row > posAfter.row) || (posCurrent.row > posBefore.row && posCurrent.col > posAfter.col))
 			{
 				dir = Direction::down;
 				dir2 = Direction::left;
 			}
-			else if (posBefore.row > posCurrent.row && posCurrent.col < posAfter.col)
+			// else if (posBefore.row > posCurrent.row && posCurrent.col < posAfter.col)
+			else if ((posCurrent.col < posBefore.col && posCurrent.row < posAfter.row) || (posCurrent.row < posBefore.row && posCurrent.col < posAfter.col))
 			{
 				dir = Direction::up;
 				dir2 = Direction::right;
 			}
-			//else if (posBefore.row > posCurrent.row && posCurrent.col > posAfter.col)
+			//else if (posBefore.row > posCurrent.row && posCurrent.col > posAfter.col) mmmmmmmmmmmmm
 			else
 			{
 				dir = Direction::up;
@@ -286,7 +272,7 @@ void DrawSnakeBody()
 		}
 
 		Rectf dstRect{ pCells[g_Snake[i]].left, pCells[g_Snake[i]].bottom, g_CellSize, g_CellSize };
-		DrawTexture(g_SnakeGraphics, dstRect, src);
+		utils::DrawTexture(g_SnakeGraphics, dstRect, src);
 	}
 }
 
