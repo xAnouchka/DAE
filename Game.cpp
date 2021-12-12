@@ -406,6 +406,8 @@ bool DidSnakeGetFruit()
 	{
 		g_UpdateFruit = true;
 		++g_Score;
+		g_Snake[g_SnakeLength] = g_Snake[0];
+		++g_SnakeLength;
 		return true;
 	}
 	return false;
