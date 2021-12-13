@@ -55,6 +55,11 @@ void End()
 	DeleteTexture(g_GameOver2Texture);
 	DeleteTexture(g_EndScoreTexture);
 	DeleteTexture(g_EndScoreNrTexture);
+	DeleteTexture(g_TitleTexture);
+	DeleteTexture(g_Title2Texture);
+	DeleteTexture(g_StartTexture);
+	DeleteTexture(g_StartCreditsTexture);
+	DeleteTexture(g_CreditNamesTexture);
 }
 #pragma endregion gameFunctions
 
@@ -103,6 +108,9 @@ void OnKeyUpEvent(SDL_Keycode key)
 		g_SpeedFactor = 13.f;
 		g_ShowDifficulty = false;
 		break;
+	case SDLK_SPACE:
+		g_StartScreen = false;
+		break;
 	}
 }
 
@@ -143,6 +151,16 @@ void InitTextures()
 	if (!success) std::cout << "Failed loading g_GameOver2Texture ";
 	success = { TextureFromString("score: ", "Resources/Retro-Gaming.otf", 25, g_White, g_EndScoreTexture) };
 	if (!success) std::cout << "Failed loading g_EndScoreTexture ";
+	success = { TextureFromString("SNEK", "Resources/Retro-Gaming.otf", 100, g_Green, g_TitleTexture) };
+	if (!success) std::cout << "Failed loading g_TitleTexture ";
+	success = { TextureFromString("GAME", "Resources/Retro-Gaming.otf", 100, g_Green, g_Title2Texture) };
+	if (!success) std::cout << "Failed loading g_Title2Texture ";
+	success = { TextureFromString("press space to start game", "Resources/Retro-Gaming.otf", 25, g_Red, g_StartTexture) };
+	if (!success) std::cout << "Failed loading g_StartTexture ";
+	success = { TextureFromString("created by", "Resources/Retro-Gaming.otf", 15, g_White, g_StartCreditsTexture) };
+	if (!success) std::cout << "Failed loading g_StartCreditsTexture ";
+	success = { TextureFromString("Anouchka Thijs & Angelica Rings", "Resources/Retro-Gaming.otf", 15, g_White, g_CreditNamesTexture) };
+	if (!success) std::cout << "Failed loading g_CreditNamesTexture ";
 	
 }
 
@@ -370,6 +388,31 @@ void DrawGameOver()
 		
 		bool success{ TextureFromString(std::to_string(g_Score), "Resources/Retro-Gaming.otf", 25, g_White, g_EndScoreNrTexture) };
 		if (!success) std::cout << "Failed loading g_EndScoreNrTexture ";
+	}
+}
+
+void DrawStartScreen()
+{
+	if (g_StartScreen)
+	{
+		SetColor(g_Black);
+		FillRect(0.0f, 0.0f, g_WindowWidth, g_WindowHeight);
+
+		Point2f snekPos{ g_WindowWidth / 4 + 20, g_WindowHeight * 2 / 3 };
+		DrawTexture(g_TitleTexture, snekPos);
+
+		Point2f gamePos{ g_WindowWidth / 4 + 20, g_WindowHeight /2};
+		DrawTexture(g_Title2Texture, gamePos);
+
+		Point2f startPos{ g_WindowWidth / 5 + 10, g_WindowHeight / 3 };
+		DrawTexture(g_StartTexture, startPos);
+
+		Point2f creditsPos{ g_WindowWidth / 2 - 50, g_WindowHeight / 7 };
+		DrawTexture(g_StartCreditsTexture, creditsPos);
+
+		Point2f namesPos{ g_WindowWidth / 4 + 20, g_WindowHeight / 7 - 25 };
+		DrawTexture(g_CreditNamesTexture, namesPos);
+
 	}
 }
 
